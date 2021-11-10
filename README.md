@@ -1,3 +1,12 @@
+A PaperMC fork that re-enable the sand dupe!
+===========
+**I've just created a patch file to re-enable the sand dupe!**
+**How to compile
+------
+**Clone this rep
+**Do the steps below (How To (Compiling Jar From Source))
+**Done!
+
 Paper [![Paper Build Status](https://img.shields.io/github/workflow/status/PaperMC/Paper/Build%20Paper/master)](https://github.com/PaperMC/Paper/actions)
 [![Discord](https://img.shields.io/discord/289587909051416579.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/papermc)
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/papermc?label=GitHub%20Sponsors)](https://github.com/sponsors/PaperMC)
