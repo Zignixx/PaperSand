@@ -35,7 +35,7 @@ jobs:
               run: |
                   ./gradlew reobfJar --stacktrace
             - name: Create artifact folder
-              run: mkdir artifact 
+              run: mkdir artifact
             - name: Copy jar file to artifact folder
               uses: canastro/copy-file-action@master
               with:
