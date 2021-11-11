@@ -35,14 +35,14 @@ jobs:
               run: |
                   ./gradlew reobfJar --stacktrace
             - name: Create artifact folder
-              run: mkdir artifact
+              run: mkdir artifact 
             - name: Copy jar file to artifact folder
               uses: canastro/copy-file-action@master
               with:
                   source: "Paper-Server/build/libs/Paper-Server-reobf.jar"
-                  target: "artifact/PaperSand-${GITHUB_SHA::6}.jar"
+                  target: "artifact/PaperSand-${{GITHUB_SHA::6}}.jar"
             - name: Upload Artifact
               uses: actions/upload-artifact@v2
               with: 
-                  name: PaperSand-${GITHUB_SHA::6}
+                  name: PaperSand-"${{GITHUB_SHA::6}}"
                   path: artifact
