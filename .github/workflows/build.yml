@@ -42,5 +42,5 @@ jobs:
             - name: Upload Artifact
               uses: actions/upload-artifact@v2
               with: 
-                  name: PaperSand-${{GITHUB_SHA::6}}
+                  name: PaperSand-${{ GITHUB_SHA::6 }}
                   path: artifact
