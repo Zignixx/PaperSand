@@ -25,8 +25,6 @@ jobs:
                   distribution: 'temurin'
             - name: Patch and build
               run: |
-                  echo "Branch: ${GITHUB_REF#refs/heads/}"
-                  echo "Sha: ${GITHUB_SHA::6}"
                   git config --global user.email "no-reply@github.com"
                   git config --global user.name "Github Actions"
                   ./gradlew applyPatches --stacktrace
@@ -40,7 +38,7 @@ jobs:
               uses: canastro/copy-file-action@master
               with:
                   source: "Paper-Server/build/libs/Paper-Server-reobf.jar"
-                  target: "artifact/PaperSand-${{GITHUB_SHA::6}}.jar"
+                  target: "artifact/PaperSandServer.jar"
             - name: Upload Artifact
               uses: actions/upload-artifact@v2
               with: 
