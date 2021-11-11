@@ -23,6 +23,9 @@ jobs:
                   java-version: ${{ matrix.java }}
                   cache: 'gradle'
                   distribution: 'temurin'
+            - name: Set outputs
+              id: vars
+              run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
             - name: Patch and build
               run: |
                   git config --global user.email "no-reply@github.com"
@@ -38,9 +41,9 @@ jobs:
               uses: canastro/copy-file-action@master
               with:
                   source: "Paper-Server/build/libs/Paper-Server-reobf.jar"
-                  target: "artifact/PaperSandServer.jar"
+                  target: "artifact/PaperSandServer-${{ steps.vars.outputs.sha_short }}.jar"
             - name: Upload Artifact
               uses: actions/upload-artifact@v2
               with: 
-                  name: PaperSand-${GITHUB_SHA::6}
+                  name: PaperSand-${{ steps.vars.outputs.sha_short }}
                   path: artifact
