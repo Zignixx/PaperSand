@@ -1,8 +1,8 @@
-# PaperSand Auto compile + setup a development release
+# PaperSand Auto compile
 #
 
 name: Build Paper
-on: [push]
+on: [pull_request]
 
 jobs:
     build:
@@ -38,39 +38,8 @@ jobs:
               with:
                   source: "Paper-Server/build/libs/Paper-Server-reobf.jar"
                   target: "artifact/PaperSandServer-1.17.1-${{ steps.vars.outputs.sha_short }}.jar"
-            - name: release
-              uses: actions/create-release@v1
-              id: create_release
-              with:
-                  draft: false
-                  prerelease: true
-                  release_name: Development Build - ${{ steps.vars.outputs.sha_short }}
-                  tag_name: latest
-                  body_path: PRERELEASE.md
-              env:
-                  GITHUB_TOKEN: ${{ github.token }}
-            - name: upload artifact
-              uses: actions/upload-release-asset@v1
-              env:
-                  GITHUB_TOKEN: ${{ github.token }}
-              with:
-                  upload_url: ${{ steps.create_release.outputs.upload_url }}
-                  asset_path: ./artifact/PaperSandServer-1.17.1-${{ steps.vars.outputs.sha_short }}.jar
-                  asset_name: PaperSandServer-1.17.1-${{ steps.vars.outputs.sha_short }}.jar
-                  asset_content_type: application/java-archive
             - name: Upload Artifact
               uses: actions/upload-artifact@v2
               with: 
                   name: PaperSand-1.17.1-${{ steps.vars.outputs.sha_short }}
                   path: artifact
-            - name: release
-              uses: actions/create-release@v1
-              id: create_release
-              with:
-                  draft: false
-                  prerelease: false
-                  release_name: ${{ steps.version.outputs.version }}
-                  tag_name: ${{ github.ref }}
-                  body_path: CHANGELOG.md
-              env:
-                  GITHUB_TOKEN: ${{ github.token }}
