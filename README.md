@@ -5,7 +5,7 @@ A PaperMC fork that re-enable the sand dupe!
 **How to compile**
 * Clone this rep
 * Do the steps below (How To (Compiling Jar From Source))
-* Done!  
+* Done!   
 
 **I'm using this for a little private server. If needed, open a [issue](https://github.com/Zignixx/PaperSand/issues) so i can update it!**
 ------
