@@ -25,7 +25,24 @@ jobs:
                   distribution: 'temurin'
             - name: Patch and build
               run: |
+                  echo "Branch: ${{ steps.vars.outputs.branch }}"
+                  echo "Sha: ${{ steps.vars.outputs.sha_short }}"
                   git config --global user.email "no-reply@github.com"
                   git config --global user.name "Github Actions"
                   ./gradlew applyPatches --stacktrace
                   ./gradlew build --stacktrace
+            - name: Compile jar files
+              run: |
+                  ./gradlew reobfJar --stacktrace
+            - name: Create artifact folder
+              run: mkdir artifact
+            - name: Copy jar file to artifact folder
+              uses: canastro/copy-file-action@master
+              with:
+                  source: "Paper-Server/build/libs/Paper-Server-reobf.jar"
+                  target: "artifact/PaperSand-${{ steps.vars.outputs.sha_short }}.jar"
+            - name: Upload Artifact
+              uses: actions/upload-artifact@v2
+              with: 
+                  name: ${{ steps.vars.outputs.sha_short }}
+                  path: artifact
