@@ -1,7 +1,7 @@
 # PaperSand Auto compile + setup a development release
 #
 
-name: Build Paper
+name: Build and test Paper
 on: [push]
 
 jobs:
