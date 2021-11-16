@@ -1,0 +1,34 @@
+name: Scheduled Merge Remote Action
+on: 
+  schedule:
+    - cron: '0,15,30,45 * * * *'
+    # scheduled every 15 minutes (to test)
+  workflow_dispatch:
+    inputs:
+      upstream:
+        description: 'Upstream repository owner/name. Eg. exions/merge-upstream'
+        required: true
+        default: 'PaperMC'
+      upstream-branch:
+        description: 'Upstream branch to merge from. Eg. master'
+        required: true
+        default: 'master'
+      branch:
+        description: 'Branch to merge to'
+        required: true
+        default: 'master'
+jobs:
+  merge-upstream:
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.branch }}
+          fetch-depth: 0 
+      - name: Merge Upstream
+        uses: exions/merge-upstream@v1
+        with:
+          upstream: ${{ github.event.inputs.upstream }}
+          upstream-branch: ${{ github.event.inputs.upstream-branch }}
+          branch: ${{ github.event.inputs.branch }}
