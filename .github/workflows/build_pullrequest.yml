@@ -30,13 +30,13 @@ jobs:
                   ./gradlew build --stacktrace
             - name: Compile jar files
               run: |
-                  ./gradlew reobfJar --stacktrace
+                  ./gradlew paperclipJar --stacktrace
             - name: Create artifact folder
               run: mkdir artifact
             - name: Copy jar file to artifact folder
               uses: canastro/copy-file-action@master
               with:
-                  source: "Paper-Server/build/libs/Paper-Server-reobf.jar"
+                  source: "build/libs/Paper-1.17.1-R0.1-SNAPSHOT.jar"
                   target: "artifact/PaperSandServer-1.17.1-${{ steps.vars.outputs.sha_short }}.jar"
             - name: Upload Artifact
               uses: actions/upload-artifact@v2
