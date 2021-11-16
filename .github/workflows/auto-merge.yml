@@ -8,7 +8,7 @@ on:
       upstream:
         description: 'Upstream repository owner/name. Eg. exions/merge-upstream'
         required: true
-        default: 'PaperMC'
+        default: 'PaperMC/Paper'
       upstream-branch:
         description: 'Upstream branch to merge from. Eg. master'
         required: true
