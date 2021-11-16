@@ -1,7 +1,7 @@
 # PaperSand Auto compile
 #
 
-name: Build Paper as artifact
+name: Build/Test Paper
 on: [pull_request]
 
 jobs:
