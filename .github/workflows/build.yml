@@ -43,7 +43,7 @@ jobs:
               id: create_release
               with:
                   draft: false
-                  prerelease: true
+                  prerelease: false
                   release_name: Development Build - ${{ steps.vars.outputs.sha_short }}
                   tag_name: ${{ steps.vars.outputs.sha_short }}
                   body_path: PRERELEASE.md
