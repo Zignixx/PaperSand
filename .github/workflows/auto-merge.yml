@@ -18,3 +18,4 @@ jobs:
           upstream: PaperMC/Paper
           upstream-branch: master
           branch: master
+          token: ${{ secrets.TOKEN }}
