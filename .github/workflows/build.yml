@@ -44,12 +44,9 @@ jobs:
             - name: Results
               id: vars
               run: |
-                  echo "Found ${{ steps.pl.outputs.path_count }} file(s) with this extension:"
                   for i in ${{ steps.pl.outputs.paths }}; do
                   echo "::set-output name=destinationFileName::$i"
-                  echo $i
                   done
-                  echo ${{ steps.vars.outputs.destinationFileName }}
             - name: Format Filename Part 1
               uses: mad9000/actions-find-and-replace-string@1
               id: findandreplace
@@ -82,7 +79,7 @@ jobs:
                   draft: false
                   prerelease: false
                   release_name: ${{ steps.vars2.outputs.destinationFileNameVersion }} v${{ github.run_number }} - Development Build
-                  tag_name: ${{ steps.vars2.outputs.destinationFileNameVersion }} v${{ github.run_number }}
+                  tag_name: ${{ steps.vars2.outputs.destinationFileNameVersion }}-v${{ github.run_number }}
                   body_path: PRERELEASE.md
               env:
                   GITHUB_TOKEN: ${{ github.token }}
