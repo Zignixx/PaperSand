@@ -71,16 +71,16 @@ jobs:
             - name: Copy jar file to artifact folder
               uses: canastro/copy-file-action@master
               with:
-                  source: "build/libs/Paper-${{ destinationFileNameVersion }}-R0.1-SNAPSHOT.jar"
-                  target: "artifact/PaperSandServer-${{ destinationFileNameVersion }}-v${{ github.run_number }}.jar"
+                  source: "build/libs/Paper-${{ steps.vars.outputs.destinationFileNameVersion }}-R0.1-SNAPSHOT.jar"
+                  target: "artifact/PaperSandServer-${{ steps.vars.outputs.destinationFileNameVersion }}-v${{ github.run_number }}.jar"
             - name: Create GitHub Release
               uses: actions/create-release@v1
               id: create_release
               with:
                   draft: false
                   prerelease: false
-                  release_name: ${{ destinationFileNameVersion }} v${{ github.run_number }} - Development Build
-                  tag_name: ${{ destinationFileNameVersion }} v${{ github.run_number }}
+                  release_name: ${{ steps.vars.outputs.destinationFileNameVersion }} v${{ github.run_number }} - Development Build
+                  tag_name: ${{ steps.vars.outputs.destinationFileNameVersion }} v${{ github.run_number }}
                   body_path: PRERELEASE.md
               env:
                   GITHUB_TOKEN: ${{ github.token }}
@@ -90,11 +90,11 @@ jobs:
                   GITHUB_TOKEN: ${{ github.token }}
               with:
                   upload_url: ${{ steps.create_release.outputs.upload_url }}
-                  asset_path: ./artifact/PaperSandServer-${{ destinationFileNameVersion }}-v${{ github.run_number }}.jar
-                  asset_name: PaperSandServer-${{ destinationFileNameVersion }}-v${{ github.run_number }}.jar
+                  asset_path: ./artifact/PaperSandServer-${{ steps.vars.outputs.destinationFileNameVersion }}-v${{ github.run_number }}.jar
+                  asset_name: PaperSandServer-${{ steps.vars.outputs.destinationFileNameVersion }}-v${{ github.run_number }}.jar
                   asset_content_type: application/java-archive
             - name: Upload Artifact
               uses: actions/upload-artifact@v2
               with: 
-                  name: PaperSand-${{ destinationFileNameVersion }}-v${{ github.run_number }}
+                  name: PaperSand-${{ steps.vars.outputs.destinationFileNameVersion }}-v${{ github.run_number }}
                   path: artifact
