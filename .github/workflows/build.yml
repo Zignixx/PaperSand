@@ -54,7 +54,7 @@ jobs:
               id: findandreplace
               with:
                   source: ${{ steps.vars.outputs.destinationFileName }}
-                  find: 'build/libs/Paper-'
+                  find: 'build/libs//Paper-'
                   replace: ''
               
             - name: Format Filename Part 2
@@ -62,23 +62,25 @@ jobs:
               id: findandreplace2
               with:
                   source: ${{ steps.findandreplace.outputs.value }}
-                  find: '-R0.1-SNAPSHOT'
+                  find: '-R0.1-SNAPSHOT.jar'
                   replace: ''
             - name: Test Output
-              run: echo "The replaced value is ${{ steps.findandreplace2.outputs.value }}"
+              run: | 
+                echo "The replaced value is ${{ steps.findandreplace2.outputs.value }}"
+                echo "::set-output name=destinationFileNameVersion::${{ steps.findandreplace2.outputs.value }}"
             - name: Copy jar file to artifact folder
               uses: canastro/copy-file-action@master
               with:
-                  source: "build/libs/Paper-1.17.1-R0.1-SNAPSHOT.jar"
-                  target: "artifact/PaperSandServer-1.17.1-v${{ github.run_number }}.jar"
+                  source: "build/libs/Paper-${{ destinationFileNameVersion }}-R0.1-SNAPSHOT.jar"
+                  target: "artifact/PaperSandServer-${{ destinationFileNameVersion }}-v${{ github.run_number }}.jar"
             - name: Create GitHub Release
               uses: actions/create-release@v1
               id: create_release
               with:
                   draft: false
                   prerelease: false
-                  release_name: Development Build - v${{ github.run_number }}
-                  tag_name: v${{ github.run_number }}
+                  release_name: ${{ destinationFileNameVersion }} v${{ github.run_number }} - Development Build
+                  tag_name: ${{ destinationFileNameVersion }} v${{ github.run_number }}
                   body_path: PRERELEASE.md
               env:
                   GITHUB_TOKEN: ${{ github.token }}
@@ -88,11 +90,11 @@ jobs:
                   GITHUB_TOKEN: ${{ github.token }}
               with:
                   upload_url: ${{ steps.create_release.outputs.upload_url }}
-                  asset_path: ./artifact/PaperSandServer-1.17.1-v${{ github.run_number }}.jar
-                  asset_name: PaperSandServer-1.17.1-v${{ github.run_number }}.jar
+                  asset_path: ./artifact/PaperSandServer-${{ destinationFileNameVersion }}-v${{ github.run_number }}.jar
+                  asset_name: PaperSandServer-${{ destinationFileNameVersion }}-v${{ github.run_number }}.jar
                   asset_content_type: application/java-archive
             - name: Upload Artifact
               uses: actions/upload-artifact@v2
               with: 
-                  name: PaperSand-1.17.1-v${{ github.run_number }}
+                  name: PaperSand-${{ destinationFileNameVersion }}-v${{ github.run_number }}
                   path: artifact
