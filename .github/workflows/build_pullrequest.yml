@@ -68,7 +68,7 @@ jobs:
               run: | 
                 echo "The replaced value is ${{ steps.findandreplace2.outputs.value }}"
                 echo "::set-output name=destinationFileNameVersion::${{ steps.findandreplace2.outputs.value }}"
-            - name: Copy jar file to artifact folder
+            - name: Copy Jar File to Artifact Folder
               uses: canastro/copy-file-action@master
               with:
                   source: "build/libs/Paper-${{ steps.vars2.outputs.destinationFileNameVersion }}-R0.1-SNAPSHOT.jar"
