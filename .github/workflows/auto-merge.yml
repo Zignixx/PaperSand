@@ -18,4 +18,6 @@ jobs:
           upstream: PaperMC/Paper
           upstream-branch: master
           branch: master
+          email: cobra1989@gmail.com
+          name: Zignixx
           token: ${{ secrets.TOKEN }}
