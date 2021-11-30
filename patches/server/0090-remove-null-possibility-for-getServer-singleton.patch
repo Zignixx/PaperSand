@@ -6,18 +6,18 @@ Subject: [PATCH] remove null possibility for getServer singleton
 to stop IDE complaining about potential NPE
 
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 4e7016c20a72271ff62fb676280d3880864919f1..d58516922198ffeb51263243e7b7b666de2d9ea2 100644
+index 0bbefc2643f7db64389c4e1ee3419abcc967ee98..fecc9f721f3fb136212f6e8ed7e3e11e8eda8323 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -188,6 +188,7 @@ import org.spigotmc.SlackActivityAccountant; // Spigot
+@@ -185,6 +185,7 @@ import org.spigotmc.SlackActivityAccountant; // Spigot
  
- public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTask> implements SnooperPopulator, CommandSource, AutoCloseable {
+ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTask> implements CommandSource, AutoCloseable {
  
 +    private static MinecraftServer SERVER; // Paper
      public static final Logger LOGGER = LogManager.getLogger();
+     public static final String VANILLA_BRAND = "vanilla";
      private static final float AVERAGE_TICK_TIME_SMOOTHING = 0.8F;
-     private static final int TICK_STATS_SPAN = 100;
-@@ -317,6 +318,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -319,6 +320,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
  
      public MinecraftServer(OptionSet options, DataPackConfig datapackconfiguration, Thread thread, RegistryAccess.RegistryHolder iregistrycustom_dimension, LevelStorageSource.LevelStorageAccess convertable_conversionsession, WorldData savedata, PackRepository resourcepackrepository, Proxy proxy, DataFixer datafixer, ServerResources datapackresources, @Nullable MinecraftSessionService minecraftsessionservice, @Nullable GameProfileRepository gameprofilerepository, @Nullable GameProfileCache usercache, ChunkProgressListenerFactory worldloadlistenerfactory) {
          super("Server");
@@ -25,7 +25,7 @@ index 4e7016c20a72271ff62fb676280d3880864919f1..d58516922198ffeb51263243e7b7b666
          this.metricsRecorder = InactiveMetricsRecorder.INSTANCE;
          this.profiler = this.metricsRecorder.getProfiler();
          this.onMetricsRecordingStopped = (methodprofilerresults) -> {
-@@ -2259,7 +2261,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -2258,7 +2260,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
  
      @Deprecated
      public static MinecraftServer getServer() {

@@ -12,10 +12,10 @@ just as it does in Vanilla, but entity pushing logic will be capped.
 You can set this to 0 to disable collisions.
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index bfb83d85601f6e3298395c8424cf4476797a2e79..299f4b5967a740429b2074161449a27941f5c387 100644
+index f383f30b9dd1a7c6cf69d342f99118beec70b206..7cd6a36e000d9e1958d260739e6fcfb064402b4d 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-@@ -365,4 +365,10 @@ public class PaperWorldConfig {
+@@ -370,4 +370,10 @@ public class PaperWorldConfig {
              log("Treasure Maps will return already discovered locations");
          }
      }
@@ -27,10 +27,10 @@ index bfb83d85601f6e3298395c8424cf4476797a2e79..299f4b5967a740429b2074161449a279
 +    }
  }
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 700cf06b588f4a6d25fc5050cc94ba56e2e2c4f9..56c05c91fc0306437c97339589268e8a4c2c5d76 100644
+index 0041783c4cc05ce2730f15b4c8c58ff6f1a94f57..a1ca58317ed0c6a395503d00cff332b092c4d549 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -322,6 +322,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, n
+@@ -325,6 +325,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, i
      public final org.spigotmc.ActivationRange.ActivationType activationType = org.spigotmc.ActivationRange.initializeEntityActivationType(this);
      public final boolean defaultActivationState;
      public long activatedTick = Integer.MIN_VALUE;
@@ -39,10 +39,10 @@ index 700cf06b588f4a6d25fc5050cc94ba56e2e2c4f9..56c05c91fc0306437c97339589268e8a
      // Spigot end
  
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 84c7955cb6eacf7d552a2310b7820453cfb3e999..2940738eb6ac4aba76bd67fc10392b525f07f3f0 100644
+index 36aef3dbfe407ca6fa206bc3fc4390e5c2770aa3..e0fe53045da81fc9b2eac3b215d641cf0c722895 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -3228,8 +3228,11 @@ public abstract class LivingEntity extends Entity {
+@@ -3227,8 +3227,11 @@ public abstract class LivingEntity extends Entity {
                  }
              }
  

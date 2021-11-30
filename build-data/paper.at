@@ -9,6 +9,10 @@
 # Remap/Decompile fix (unclear why this is happening)
 public net.minecraft.server.MinecraftServer doRunTask(Lnet/minecraft/server/TickTask;)V
 
+# AT remap issue? todo 1.18
+public net.minecraft.world.level.dimension.end.EndDragonFight findExitPortal()Lnet/minecraft/world/level/block/state/pattern/BlockPattern$BlockPatternMatch;
+public net.minecraft.nbt.TagParser readArrayTag()Lnet/minecraft/nbt/Tag;
+
 # Paper config files
 public org.spigotmc.SpigotWorldConfig getBoolean(Ljava/lang/String;Z)Z
 public org.spigotmc.SpigotWorldConfig getDouble(Ljava/lang/String;)D
@@ -32,6 +36,10 @@ public net.minecraft.network.protocol.game.ServerboundInteractPacket$ActionType
 # Configurable RCON IP address
 public net.minecraft.server.dedicated.Settings getStringRaw(Ljava/lang/String;)Ljava/lang/String;
 
+# Mob Spawner API Enhancements
+public net.minecraft.world.level.BaseSpawner isNearPlayer(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)Z
+public net.minecraft.world.level.BaseSpawner delay(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)V
+
 # LootTable API
 public org.bukkit.craftbukkit.block.CraftBlockEntityState getTileEntity()Lnet/minecraft/world/level/block/entity/BlockEntity;
 public org.bukkit.craftbukkit.block.CraftLootable setLootTable(Lorg/bukkit/loot/LootTable;J)V
@@ -46,7 +54,7 @@ public net.minecraft.world.entity.player.Player removeEntitiesOnShoulder()V
 # LivingEntity setkiller
 public net.minecraft.world.entity.LivingEntity lastHurtByPlayerTime
 
-# SkeletonHorse Addittions
+# SkeletonHorse Additions
 public net.minecraft.world.entity.animal.horse.SkeletonHorse trapTime
 
 # Fix client rendering skulls
@@ -62,6 +70,7 @@ public-f net.minecraft.world.level.chunk.storage.RegionFileStorage
 public net.minecraft.world.level.chunk.storage.RegionFileStorage getFile(Lnet/minecraft/world/level/ChunkPos;Z)Lnet/minecraft/world/level/chunk/storage/RegionFile;
 public net.minecraft.world.level.chunk.storage.SectionStorage dirty
 public net.minecraft.util.thread.BlockableEventLoop runAllTasks()V
+public net.minecraft.server.level.ChunkMap getPoiManager()Lnet/minecraft/world/entity/ai/village/poi/PoiManager;
 
 # Improve death events
 public net.minecraft.world.entity.LivingEntity getDeathSound()Lnet/minecraft/sounds/SoundEvent;
@@ -90,6 +99,7 @@ public net.minecraft.world.entity.monster.Zombie isSunSensitive()Z
 # Add PlayerConnectionCloseEvent
 public net.minecraft.server.network.ServerLoginPacketListenerImpl$State
 public net.minecraft.server.network.ServerLoginPacketListenerImpl state
+public net.minecraft.server.network.ServerLoginPacketListenerImpl gameProfile
 
 # Entity Activation Range 2.0
 public net.minecraft.world.entity.Entity isInsidePortal
@@ -255,3 +265,9 @@ public net.minecraft.world.level.block.state.BlockBehaviour hasCollision
 
 # add per world spawn limits
 public net.minecraft.world.level.NaturalSpawner SPAWNING_CATEGORIES
+
+# Optimize isValidLocation
+public net.minecraft.world.level.chunk.LevelChunkSection states
+
+# Player.setPlayerProfile API
+public-f net.minecraft.world.entity.player.Player gameProfile

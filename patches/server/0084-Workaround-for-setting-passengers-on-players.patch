@@ -1,0 +1,29 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Zach Brown <zach.brown@destroystokyo.com>
+Date: Sun, 10 Apr 2016 03:23:32 -0500
+Subject: [PATCH] Workaround for setting passengers on players
+
+SPIGOT-1915 & GH-114
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+index a7047fa93b0fe08fb62f9b0984bcd3af9217c95f..5338f255f4f664b4c1b1530ba5fd55e0e24fd5b8 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+@@ -916,6 +916,17 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+         return true;
+     }
+ 
++    // Paper start - Ugly workaround for SPIGOT-1915 & GH-114
++    @Override
++    public boolean setPassenger(org.bukkit.entity.Entity passenger) {
++        boolean wasSet = super.setPassenger(passenger);
++        if (wasSet) {
++            this.getHandle().connection.send(new net.minecraft.network.protocol.game.ClientboundSetPassengersPacket(this.getHandle()));
++        }
++        return wasSet;
++    }
++    // Paper end
++
+     @Override
+     public void setSneaking(boolean sneak) {
+         this.getHandle().setShiftKeyDown(sneak);

@@ -2,7 +2,7 @@ plugins {
     java
     `maven-publish`
     id("com.github.johnrengelman.shadow") version "7.1.0" apply false
-    id("io.papermc.paperweight.core") version "1.2.0"
+    id("io.papermc.paperweight.core") version "1.3.0-SNAPSHOT"
 }
 
 allprojects {
@@ -11,7 +11,7 @@ allprojects {
 
     java {
         toolchain {
-            languageVersion.set(JavaLanguageVersion.of(16))
+            languageVersion.set(JavaLanguageVersion.of(17))
         }
     }
 }
@@ -19,7 +19,7 @@ allprojects {
 subprojects {
     tasks.withType<JavaCompile> {
         options.encoding = Charsets.UTF_8.name()
-        options.release.set(16)
+        options.release.set(17)
     }
     tasks.withType<Javadoc> {
         options.encoding = Charsets.UTF_8.name()
@@ -46,17 +46,17 @@ repositories {
 }
 
 dependencies {
-    paramMappings("org.quiltmc:yarn:1.17.1+build.1:mergedv2")
-    remapper("net.fabricmc:tiny-remapper:0.6.0:fat")
-    decompiler("net.minecraftforge:forgeflower:1.5.498.12")
-    paperclip("io.papermc:paperclip:2.0.1")
+    paramMappings("net.fabricmc:yarn:1.18-rc3+build.2:mergedv2")
+    remapper("net.fabricmc:tiny-remapper:0.7.0:fat")
+    decompiler("net.minecraftforge:forgeflower:1.5.498.22")
+    paperclip("io.papermc:paperclip:3.0.2-SNAPSHOT")
 }
 
 paperweight {
     minecraftVersion.set(providers.gradleProperty("mcVersion"))
-    serverProject.set(project(":Paper-Server"))
+    serverProject.set(project(":paper-server"))
 
-    paramMappingsRepo.set("https://maven.quiltmc.org/repository/release/")
+    paramMappingsRepo.set("https://maven.fabricmc.net/")
     remapRepo.set("https://maven.fabricmc.net/")
     decompileRepo.set("https://files.minecraftforge.net/maven/")
 
@@ -66,9 +66,6 @@ paperweight {
 
         mappingsPatch.set(layout.projectDirectory.file("build-data/mappings-patch.tiny"))
         reobfMappingsPatch.set(layout.projectDirectory.file("build-data/reobf-mappings-patch.tiny"))
-
-        additionalSpigotMemberMappings.set(layout.projectDirectory.file("build-data/additional-spigot-member-mappings.csrg"))
-        craftBukkitPatchPatchesDir.set(layout.projectDirectory.dir("build-data/craftbukkit-patch-patches"))
 
         reobfPackagesToFix.addAll(
             "co.aikar.timings",
@@ -90,6 +87,7 @@ tasks.generateDevelopmentBundle {
         "https://repo.maven.apache.org/maven2/",
         "https://libraries.minecraft.net/",
         "https://papermc.io/repo/repository/maven-public/",
+        "https://maven.fabricmc.net/",
     )
 }
 

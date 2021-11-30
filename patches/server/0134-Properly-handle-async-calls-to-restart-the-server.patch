@@ -30,10 +30,10 @@ will have plugins and worlds saving to the disk has a high potential to result
 in corruption/dataloss.
 
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 9c73d69658de96b8216c7d945521af84d41c69ab..0b70123deec6470c8bcf46df7418086f31e893fe 100644
+index 0adfdaf3edcd10a3a7566947d58d83c623107d94..6d57327ca2450352a0ff153da00cc1d3b3ac1aca 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -232,6 +232,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -229,6 +229,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
      public final Map<ResourceKey<Level>, ServerLevel> levels;
      private PlayerList playerList;
      private volatile boolean running;
@@ -41,7 +41,7 @@ index 9c73d69658de96b8216c7d945521af84d41c69ab..0b70123deec6470c8bcf46df7418086f
      private boolean stopped;
      private int tickCount;
      protected final Proxy proxy;
-@@ -942,7 +943,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -928,7 +929,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
          if (this.playerList != null) {
              MinecraftServer.LOGGER.info("Saving players");
              this.playerList.saveAll();
@@ -50,7 +50,7 @@ index 9c73d69658de96b8216c7d945521af84d41c69ab..0b70123deec6470c8bcf46df7418086f
              try { Thread.sleep(100); } catch (InterruptedException ex) {} // CraftBukkit - SPIGOT-625 - give server at least a chance to send packets
          }
  
-@@ -1008,6 +1009,12 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -991,6 +992,12 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
      }
  
      public void halt(boolean flag) {
@@ -64,10 +64,10 @@ index 9c73d69658de96b8216c7d945521af84d41c69ab..0b70123deec6470c8bcf46df7418086f
          if (flag) {
              try {
 diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
-index db95a5d89267f5bfc8020fcedf57b31daffc73a5..71991aee0d60299f744c896075502d1b436b3e44 100644
+index d96e4b008e6a23952eaae0d506dad9785761b41f..6e635a1cf5091aa7c4697de2a08414e053cc51a5 100644
 --- a/src/main/java/net/minecraft/server/players/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/players/PlayerList.java
-@@ -1142,8 +1142,15 @@ public abstract class PlayerList {
+@@ -1147,8 +1147,15 @@ public abstract class PlayerList {
      }
  
      public void removeAll() {

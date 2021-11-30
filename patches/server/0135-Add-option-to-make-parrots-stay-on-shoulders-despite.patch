@@ -11,10 +11,10 @@ I suspect Mojang may switch to this behavior before full release.
 To be converted into a Paper-API event at some point in the future?
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index 299f4b5967a740429b2074161449a27941f5c387..c93346af613c50c7797c991c0b3bb6565729129f 100644
+index 7cd6a36e000d9e1958d260739e6fcfb064402b4d..506539188aa1a2c7aa21b8ba3e0769a09d6ad134 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-@@ -371,4 +371,10 @@ public class PaperWorldConfig {
+@@ -376,4 +376,10 @@ public class PaperWorldConfig {
          maxCollisionsPerEntity = getInt( "max-entity-collisions", this.spigotConfig.getInt("max-entity-collisions", 8) );
          log( "Max Entity Collisions: " + maxCollisionsPerEntity );
      }
@@ -26,10 +26,10 @@ index 299f4b5967a740429b2074161449a27941f5c387..c93346af613c50c7797c991c0b3bb656
 +    }
  }
 diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-index b10cc589871f2d35704f5f58b4902101904a1d8f..ab33f49318132a78402726a88e49bb58bc9a9de8 100644
+index f9d5af3842696c1a0286098f2d255f44932d4a4a..1eac0962c59fffe47a33903238f7f43e5f77450e 100644
 --- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 +++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-@@ -2044,6 +2044,13 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
+@@ -2050,6 +2050,13 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
          switch (packet.getAction()) {
              case PRESS_SHIFT_KEY:
                  this.player.setShiftKeyDown(true);
@@ -44,10 +44,10 @@ index b10cc589871f2d35704f5f58b4902101904a1d8f..ab33f49318132a78402726a88e49bb58
              case RELEASE_SHIFT_KEY:
                  this.player.setShiftKeyDown(false);
 diff --git a/src/main/java/net/minecraft/world/entity/player/Player.java b/src/main/java/net/minecraft/world/entity/player/Player.java
-index 82d71f529dd5d270820fbfcd9a6ee7363ae94941..a4eb5de429f6934cf6f2b771d62db51e328f8987 100644
+index 2862e75108b3304ab186ed89eb36801500e58b85..84252d88469d045a776d1e51b05991463971f64d 100644
 --- a/src/main/java/net/minecraft/world/entity/player/Player.java
 +++ b/src/main/java/net/minecraft/world/entity/player/Player.java
-@@ -579,7 +579,7 @@ public abstract class Player extends LivingEntity {
+@@ -577,7 +577,7 @@ public abstract class Player extends LivingEntity {
          this.playShoulderEntityAmbientSound(this.getShoulderEntityLeft());
          this.playShoulderEntityAmbientSound(this.getShoulderEntityRight());
          if (!this.level.isClientSide && (this.fallDistance > 0.5F || this.isInWater()) || this.abilities.flying || this.isSleeping() || this.isInPowderSnow) {

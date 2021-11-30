@@ -5,10 +5,10 @@ Subject: [PATCH] Option to remove corrupt tile entities
 
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index 6324c3465cf34cea2e7fd7d8c26a0cbeeb20eefd..097991f2dd8d35fd5bc62e23e7361d47e70da493 100644
+index d7734fbc6b684b14bc32c94e65947fb41aae126a..80345730b8ccc11d3d0833485d25b03f614aeee2 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-@@ -342,4 +342,9 @@ public class PaperWorldConfig {
+@@ -347,4 +347,9 @@ public class PaperWorldConfig {
          preventTntFromMovingInWater = getBoolean("prevent-tnt-from-moving-in-water", false);
          log("Prevent TNT from moving in water: " + preventTntFromMovingInWater);
      }
@@ -19,17 +19,26 @@ index 6324c3465cf34cea2e7fd7d8c26a0cbeeb20eefd..097991f2dd8d35fd5bc62e23e7361d47
 +    }
  }
 diff --git a/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java b/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
-index 702dbe24bfd19b0999648d4364f68a5675bee6e0..8141935e2ee58bbb58c6b5cfdef5a9a88d7658ec 100644
+index a9a14062a94b18b553a10b30de0cda7354ae4b7d..a009122a8ea9dc2b04a178248f20ef01886e832b 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
-@@ -640,6 +640,12 @@ public class LevelChunk implements ChunkAccess {
+@@ -259,7 +259,7 @@ public class LevelChunk extends ChunkAccess {
+         }
+ 
+         this.setLightCorrect(protoChunk.isLightCorrect());
+-        this.unsaved = true;
++        this.setUnsaved(true);
+         this.needsDecoration = true; // CraftBukkit
+         // CraftBukkit start
+         this.persistentDataContainer = protoChunk.persistentDataContainer; // SPIGOT-6814: copy PDC to account for 1.17 to 1.18 chunk upgrading.
+@@ -582,6 +582,12 @@ public class LevelChunk extends ChunkAccess {
                      "Chunk coordinates: " + (this.chunkPos.x * 16) + "," + (this.chunkPos.z * 16));
              e.printStackTrace();
              ServerInternalException.reportInternalException(e);
 +
 +            if (this.level.paperConfig.removeCorruptTEs) {
 +                this.removeBlockEntity(blockEntity.getBlockPos());
-+                this.markUnsaved();
++                this.setUnsaved(true);
 +                org.bukkit.Bukkit.getLogger().info("Removing corrupt tile entity");
 +            }
              // Paper end

@@ -5,16 +5,16 @@ Subject: [PATCH] Add EntityZapEvent
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/npc/Villager.java b/src/main/java/net/minecraft/world/entity/npc/Villager.java
-index e6f1f9794ddd86a1ea0a6adceb9c9dc81997183f..7ddcdafdd9b60e9cab2d6b0a3c5b40694ea59506 100644
+index 4529692f3e5df444bf4d58704d7608d8f4219a77..d9539f906348c13afc6f1b0032c3ce259f1c87c0 100644
 --- a/src/main/java/net/minecraft/world/entity/npc/Villager.java
 +++ b/src/main/java/net/minecraft/world/entity/npc/Villager.java
-@@ -826,9 +826,17 @@ public class Villager extends AbstractVillager implements ReputationEventHandler
+@@ -829,9 +829,17 @@ public class Villager extends AbstractVillager implements ReputationEventHandler
      @Override
      public void thunderHit(ServerLevel world, LightningBolt lightning) {
          if (world.getDifficulty() != Difficulty.PEACEFUL) {
 -            Villager.LOGGER.info("Villager {} was struck by lightning {}.", this, lightning);
 +            // Paper - move log down, event can cancel
-             Witch entitywitch = (Witch) EntityType.WITCH.create((Level) world);
+             Witch entitywitch = (Witch) EntityType.WITCH.create(world);
  
 +            // Paper start
 +            if (org.bukkit.craftbukkit.event.CraftEventFactory.callEntityZapEvent(this, lightning, entitywitch).isCancelled()) {
