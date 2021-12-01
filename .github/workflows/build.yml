@@ -52,7 +52,7 @@ jobs:
               id: findandreplace
               with:
                   source: ${{ steps.vars.outputs.destinationFileName }}
-                  find: 'build/libs//Paper-'
+                  find: 'build/libs//paper-paperclip-'
                   replace: ''
               
             - name: Format Filename Part 2
@@ -60,7 +60,7 @@ jobs:
               id: findandreplace2
               with:
                   source: ${{ steps.findandreplace.outputs.value }}
-                  find: '-R0.1-SNAPSHOT.jar'
+                  find: '-R0.1-SNAPSHOT-reobf.jar'
                   replace: ''
             - name: Results after Replace
               id: vars2
@@ -70,7 +70,7 @@ jobs:
             - name: Copy Jar File to Artifact Folder
               uses: canastro/copy-file-action@master
               with:
-                  source: "build/libs/Paper-${{ steps.vars2.outputs.destinationFileNameVersion }}-R0.1-SNAPSHOT.jar"
+                  source: "build/libs/paper-paperclip-${{ steps.vars2.outputs.destinationFileNameVersion }}-R0.1-SNAPSHOT-reobf.jar"
                   target: "artifact/PaperSandServer-${{ steps.vars2.outputs.destinationFileNameVersion }}-v${{ github.run_number }}.jar"
             - name: Create GitHub Release
               uses: actions/create-release@v1
