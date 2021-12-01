@@ -12,8 +12,6 @@ jobs:
         with:
           ref: master
           fetch-depth: 0
-          persist-credentials: false
-          token: ${{ secrets.TOKEN }}
       - name: Merge Upstream
         uses: Cubik65536/merge-upstream@v1.1.3
         with:
