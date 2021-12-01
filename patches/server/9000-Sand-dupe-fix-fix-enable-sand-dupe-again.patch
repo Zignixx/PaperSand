@@ -1,0 +1,90 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Zignixx <cobra1989@gmail.com>
+Date: Wed, 1 Dec 2021 12:03:11 +0100
+Subject: [PATCH] Sand dupe fix fix (enable sand dupe again)
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
+index 3febcc7e88b74d4bdb45e633fdaa9d3313a6ae0b..8254df7e523a56e1e8869faebf956ad1d17f0713 100644
+--- a/src/main/java/net/minecraft/world/entity/Entity.java
++++ b/src/main/java/net/minecraft/world/entity/Entity.java
+@@ -2659,7 +2659,10 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, i
+             }
+ 
+             this.processPortalCooldown();
+-            this.tickEndPortal(); // Paper - make end portalling safe
++            // Sand dupe fix fix start
++            // This should be not here to get the sand dupe work again?
++            // this.tickEndPortal(); // Paper - make end portalling safe
++            // Sand dupe fix fix end
+         }
+     }
+ 
+diff --git a/src/main/java/net/minecraft/world/entity/item/FallingBlockEntity.java b/src/main/java/net/minecraft/world/entity/item/FallingBlockEntity.java
+index 0c94b4cb6ee0c3dffe0b67a2291d0160ae0ef96f..503a7d236803a80ccd9856d0c4a50dce18467af1 100644
+--- a/src/main/java/net/minecraft/world/entity/item/FallingBlockEntity.java
++++ b/src/main/java/net/minecraft/world/entity/item/FallingBlockEntity.java
+@@ -110,11 +110,13 @@ public class FallingBlockEntity extends Entity {
+ 
+     @Override
+     public void tick() {
++        // Sand dupe fix fix start
+         // Paper start - fix sand duping
+-        if (this.isRemoved()) {
+-            return;
+-        }
++        // if (this.isRemoved()) {
++            // return;
++        // }
+         // Paper end - fix sand duping
++        // Sand dupe fix fix end
+         if (this.blockState.isAir()) {
+             this.discard();
+         } else if (this.level.isClientSide && this.removeAtMillis > 0L) {
+@@ -152,11 +154,13 @@ public class FallingBlockEntity extends Entity {
+ 
+             this.move(MoverType.SELF, this.getDeltaMovement());
+ 
++            // Sand dupe fix fix start
+             // Paper start - fix sand duping
+-            if (this.isRemoved()) {
+-                return;
+-            }
++            // if (this.isRemoved()) {
++                // return;
++            // }
+             // Paper end - fix sand duping
++			// Sand dupe fix fix end
+ 
+             // Paper start - Configurable EntityFallingBlock height nerf
+             if (this.level.paperConfig.fallingBlockHeightNerf != 0 && this.getY() > this.level.paperConfig.fallingBlockHeightNerf) {
+diff --git a/src/main/java/net/minecraft/world/level/block/EndPortalBlock.java b/src/main/java/net/minecraft/world/level/block/EndPortalBlock.java
+index 19892cb3cb290add4f094dc87bb22106e4f07a24..d7fc561687fec182514e8df18c05b1bd25609f62 100644
+--- a/src/main/java/net/minecraft/world/level/block/EndPortalBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/EndPortalBlock.java
+@@ -52,11 +52,23 @@ public class EndPortalBlock extends BaseEntityBlock {
+             if (worldserver == null) {
+                 // return; // CraftBukkit - always fire event in case plugins wish to change it
+             }
++            // Sand dupe fix fix start
++            // CraftBukkit start - Entity in portal
++            EntityPortalEnterEvent event = new EntityPortalEnterEvent(entity.getBukkitEntity(), new org.bukkit.Location(world.getWorld(), pos.getX(), pos.getY(), pos.getZ()));
++            world.getCraftServer().getPluginManager().callEvent(event);
++
++			if (entity instanceof ServerPlayer) {
++				((ServerPlayer) entity).changeDimension(worldserver, PlayerTeleportEvent.TeleportCause.END_PORTAL);
++				return;
++			}
++			// CraftBukkit end
++			entity.changeDimension(worldserver);
+ 
+             // Paper start - move all of this logic into portal tick
+-            entity.portalWorld = ((ServerLevel)world);
+-            entity.portalBlock = pos.immutable();
++            // entity.portalWorld = ((ServerLevel)world);
++            // entity.portalBlock = pos.immutable();
+             // Paper end - move all of this logic into portal tick
++            // Sand dupe fix fix end
+         }
+ 
+     }
