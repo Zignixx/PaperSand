@@ -31,7 +31,7 @@ jobs:
                   ./gradlew build --stacktrace
             - name: Compile Jar Files
               run: |
-                  ./gradlew paperclipJar --stacktrace
+                  ./gradlew createReobfPaperclipJar --stacktrace
             - name: Create Artifact Folder
               run: mkdir artifact
               
