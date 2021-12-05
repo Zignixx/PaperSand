@@ -47,6 +47,7 @@ jobs:
               run: |
                   for i in ${{ steps.pl.outputs.paths }}; do
                   if [[ $i == *"paper-paperclip"* ]]
+                  then
                   echo "::set-output name=destinationFileName::$i"
                   fi
                   done
