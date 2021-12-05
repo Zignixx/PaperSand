@@ -46,7 +46,9 @@ jobs:
               id: vars
               run: |
                   for i in ${{ steps.pl.outputs.paths }}; do
+                  if [[ $i == *"paper-paperclip"* ]]
                   echo "::set-output name=destinationFileName::$i"
+                  fi
                   done
             - name: Format Filename Part 1
               uses: mad9000/actions-find-and-replace-string@1
