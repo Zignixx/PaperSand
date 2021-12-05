@@ -2,7 +2,7 @@ name: Scheduled Merge Remote Action
 on: 
   schedule:
     - cron: '0,15,30,45 * * * *'
-    # scheduled every 15 minutes (to test)
+    # scheduled every 15 minutes (to test) 
 jobs:
   merge-upstream:
     runs-on: ubuntu-latest
