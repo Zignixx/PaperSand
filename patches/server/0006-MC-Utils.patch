@@ -5477,7 +5477,7 @@ index ef87c37633cee4ab438f1991144188ade1c4e65f..19d3802becd353e130b785f8286e595e
  
      protected void purgeStaleTickets() {
 diff --git a/src/main/java/net/minecraft/server/level/ServerChunkCache.java b/src/main/java/net/minecraft/server/level/ServerChunkCache.java
-index d672c467267ef4d96184e104c35d0379116880db..566c32a71054479257b7fba981507fa2559aa9e6 100644
+index d672c467267ef4d96184e104c35d0379116880db..be11caf7c0dcdb11e24cfb053cda45ac1867da63 100644
 --- a/src/main/java/net/minecraft/server/level/ServerChunkCache.java
 +++ b/src/main/java/net/minecraft/server/level/ServerChunkCache.java
 @@ -48,6 +48,8 @@ import net.minecraft.world.level.storage.LevelData;
@@ -5874,17 +5874,8 @@ index d672c467267ef4d96184e104c35d0379116880db..566c32a71054479257b7fba981507fa2
      @Nullable
      @Override
      public ChunkAccess getChunk(int x, int z, ChunkStatus leastStatus, boolean create) {
-@@ -444,7 +817,7 @@ public class ServerChunkCache extends ChunkSource {
-             gameprofilerfiller.popPush("spawnAndTick");
-             boolean flag2 = this.level.getGameRules().getBoolean(GameRules.RULE_DOMOBSPAWNING) && !this.level.players().isEmpty(); // CraftBukkit
- 
--            Collections.shuffle(list);
-+            //Collections.shuffle(list); // Paper - no... just no...
-             Iterator iterator1 = list.iterator();
- 
-             while (iterator1.hasNext()) {
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index 38467827b01cba97d1ae29e67e7776b8b332f74d..d3beb7624daace9b6180a6721033a77df4faee04 100644
+index 9812116e2f28d01423373990ecce0e5ab6229ce2..e66b4837498a8bfefabc4dd95e91ccfba67843e4 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
 @@ -9,6 +9,7 @@ import it.unimi.dsi.fastutil.longs.LongSet;
@@ -6035,7 +6026,7 @@ index 3a4f026c73cdd22d30bdadabbcf24bef969b73e4..0d536d72ac918fbd403397ff369d1014
      private final String name;
      private final Comparator<T> comparator;
 diff --git a/src/main/java/net/minecraft/server/level/WorldGenRegion.java b/src/main/java/net/minecraft/server/level/WorldGenRegion.java
-index d679be6c3ce0d57fa2063a45baec1b108a0a2707..c34dcba5c94a321f236fa8c70021adf3cf190bdc 100644
+index d679be6c3ce0d57fa2063a45baec1b108a0a2707..de5e18a331178da8f7e82aa2419a0ee606e801ee 100644
 --- a/src/main/java/net/minecraft/server/level/WorldGenRegion.java
 +++ b/src/main/java/net/minecraft/server/level/WorldGenRegion.java
 @@ -152,6 +152,26 @@ public class WorldGenRegion implements WorldGenLevel {
@@ -6050,13 +6041,13 @@ index d679be6c3ce0d57fa2063a45baec1b108a0a2707..c34dcba5c94a321f236fa8c70021adf3
 +    }
 +
 +    @Override
-+    public BlockState getTypeIfLoaded(BlockPos blockposition) {
++    public final BlockState getBlockStateIfLoaded(BlockPos blockposition) {
 +        ChunkAccess chunk = this.getChunkIfLoadedImmediately(blockposition.getX() >> 4, blockposition.getZ() >> 4);
 +        return chunk == null ? null : chunk.getBlockState(blockposition);
 +    }
 +
 +    @Override
-+    public FluidState getFluidIfLoaded(BlockPos blockposition) {
++    public final FluidState getFluidIfLoaded(BlockPos blockposition) {
 +        ChunkAccess chunk = this.getChunkIfLoadedImmediately(blockposition.getX() >> 4, blockposition.getZ() >> 4);
 +        return chunk == null ? null : chunk.getFluidState(blockposition);
 +    }
@@ -6204,7 +6195,7 @@ index 962c942c05fc02befef6c306df51c0b438dd1dab..566f1b8a0acd679b2f776db2e80458b1
      }
      // CraftBukkit end
 diff --git a/src/main/java/net/minecraft/world/level/BlockGetter.java b/src/main/java/net/minecraft/world/level/BlockGetter.java
-index 76251b5adf41f8e5bf2c07145abe3108fcde8669..a60b8043540cacfa8cc3baba0872eefd4fc9464d 100644
+index 76251b5adf41f8e5bf2c07145abe3108fcde8669..8a979600b49e8a11982577fb6dd79503e2521a0f 100644
 --- a/src/main/java/net/minecraft/world/level/BlockGetter.java
 +++ b/src/main/java/net/minecraft/world/level/BlockGetter.java
 @@ -9,10 +9,12 @@ import javax.annotation.Nullable;
@@ -6225,17 +6216,17 @@ index 76251b5adf41f8e5bf2c07145abe3108fcde8669..a60b8043540cacfa8cc3baba0872eefd
  
      BlockState getBlockState(BlockPos pos);
 +    // Paper start - if loaded util
-+    @Nullable BlockState getTypeIfLoaded(BlockPos blockposition);
-+    default Material getMaterialIfLoaded(BlockPos blockposition) {
-+        BlockState type = this.getTypeIfLoaded(blockposition);
++    @Nullable BlockState getBlockStateIfLoaded(BlockPos blockposition);
++    default @Nullable Material getMaterialIfLoaded(BlockPos blockposition) {
++        BlockState type = this.getBlockStateIfLoaded(blockposition);
 +        return type == null ? null : type.getMaterial();
 +    }
 +
-+    default Block getBlockIfLoaded(BlockPos blockposition) {
-+        BlockState type = this.getTypeIfLoaded(blockposition);
++    default @Nullable Block getBlockIfLoaded(BlockPos blockposition) {
++        BlockState type = this.getBlockStateIfLoaded(blockposition);
 +        return type == null ? null : type.getBlock();
 +    }
-+    FluidState getFluidIfLoaded(BlockPos blockposition);
++    @Nullable FluidState getFluidIfLoaded(BlockPos blockposition);
 +    // Paper end
  
      FluidState getFluidState(BlockPos pos);
@@ -6282,7 +6273,7 @@ index bd7d159bdc21d7fcb25db1e3f07b9ad9d7eb5157..4c5f8a103b550a681178926096d5f758
      }
  
 diff --git a/src/main/java/net/minecraft/world/level/EmptyBlockGetter.java b/src/main/java/net/minecraft/world/level/EmptyBlockGetter.java
-index 3c707d6674b2594b09503b959a31c1f4ad3981e6..c7d499bfc22152e0a49f50a2a8133f31a1be20ff 100644
+index 3c707d6674b2594b09503b959a31c1f4ad3981e6..db61b6b0158a9bcc0e1d735e34fe3671f8c89e21 100644
 --- a/src/main/java/net/minecraft/world/level/EmptyBlockGetter.java
 +++ b/src/main/java/net/minecraft/world/level/EmptyBlockGetter.java
 @@ -17,6 +17,18 @@ public enum EmptyBlockGetter implements BlockGetter {
@@ -6291,13 +6282,13 @@ index 3c707d6674b2594b09503b959a31c1f4ad3981e6..c7d499bfc22152e0a49f50a2a8133f31
  
 +    // Paper start - If loaded util
 +    @Override
-+    public FluidState getFluidIfLoaded(BlockPos blockposition) {
-+        return this.getFluidState(blockposition);
++    public final FluidState getFluidIfLoaded(BlockPos blockposition) {
++        return Fluids.EMPTY.defaultFluidState();
 +    }
 +
 +    @Override
-+    public BlockState getTypeIfLoaded(BlockPos blockposition) {
-+        return this.getBlockState(blockposition);
++    public final BlockState getBlockStateIfLoaded(BlockPos blockposition) {
++        return Blocks.AIR.defaultBlockState();
 +    }
 +    // Paper end
 +
@@ -6305,7 +6296,7 @@ index 3c707d6674b2594b09503b959a31c1f4ad3981e6..c7d499bfc22152e0a49f50a2a8133f31
      public BlockState getBlockState(BlockPos pos) {
          return Blocks.AIR.defaultBlockState();
 diff --git a/src/main/java/net/minecraft/world/level/Level.java b/src/main/java/net/minecraft/world/level/Level.java
-index f18ae5b80c930c3a7c2da079b9926ab2657c36a3..9e6a02a05ea20c21aed26ed4bc92488627febd4c 100644
+index f18ae5b80c930c3a7c2da079b9926ab2657c36a3..84b462d5f3c9727f8da6d254e67a7a752c4508d3 100644
 --- a/src/main/java/net/minecraft/world/level/Level.java
 +++ b/src/main/java/net/minecraft/world/level/Level.java
 @@ -85,6 +85,7 @@ import org.bukkit.craftbukkit.CraftServer;
@@ -6342,7 +6333,7 @@ index f18ae5b80c930c3a7c2da079b9926ab2657c36a3..9e6a02a05ea20c21aed26ed4bc924886
 +
 +    @Override
 +    @Nullable
-+    public final BlockState getTypeIfLoaded(BlockPos blockposition) {
++    public final BlockState getBlockStateIfLoaded(BlockPos blockposition) {
 +        // CraftBukkit start - tree generation
 +        if (captureTreeGeneration) {
 +            CraftBlockState previous = capturedBlockStates.get(blockposition);
@@ -6360,15 +6351,15 @@ index f18ae5b80c930c3a7c2da079b9926ab2657c36a3..9e6a02a05ea20c21aed26ed4bc924886
 +    }
 +
 +    @Override
-+    public FluidState getFluidIfLoaded(BlockPos blockposition) {
++    public final FluidState getFluidIfLoaded(BlockPos blockposition) {
 +        ChunkAccess chunk = this.getChunkIfLoadedImmediately(blockposition.getX() >> 4, blockposition.getZ() >> 4);
 +
 +        return chunk == null ? null : chunk.getFluidState(blockposition);
 +    }
-+    // Paper end
 +
 +    @Override
 +    public final ChunkAccess getChunk(int chunkX, int chunkZ, ChunkStatus leastStatus, boolean create) { // Paper - final for inline
++        // Paper end
          ChunkAccess ichunkaccess = this.getChunkSource().getChunk(chunkX, chunkZ, leastStatus, create);
  
          if (ichunkaccess == null && create) {
@@ -6403,7 +6394,7 @@ index a1cb8379ed4062d765659e829ba2262487ce7f8b..aa76f45d18f23997af5a950855981796
      ChunkAccess getChunk(int chunkX, int chunkZ, ChunkStatus leastStatus, boolean create);
  
 diff --git a/src/main/java/net/minecraft/world/level/PathNavigationRegion.java b/src/main/java/net/minecraft/world/level/PathNavigationRegion.java
-index 47bd74f75f4c49a34a485d1963325a2152756c29..7c921d024205b683c3881c4db9314155359bd9c7 100644
+index 47bd74f75f4c49a34a485d1963325a2152756c29..0dcf1c8926e471fa40517a5c92354116dad3c3c2 100644
 --- a/src/main/java/net/minecraft/world/level/PathNavigationRegion.java
 +++ b/src/main/java/net/minecraft/world/level/PathNavigationRegion.java
 @@ -5,6 +5,7 @@ import javax.annotation.Nullable;
@@ -6414,36 +6405,46 @@ index 47bd74f75f4c49a34a485d1963325a2152756c29..7c921d024205b683c3881c4db9314155
  import net.minecraft.world.entity.Entity;
  import net.minecraft.world.level.block.Blocks;
  import net.minecraft.world.level.block.entity.BlockEntity;
-@@ -83,6 +84,29 @@ public class PathNavigationRegion implements BlockGetter, CollisionGetter {
-         return List.of();
+@@ -60,7 +61,7 @@ public class PathNavigationRegion implements BlockGetter, CollisionGetter {
+     private ChunkAccess getChunk(int chunkX, int chunkZ) {
+         int i = chunkX - this.centerX;
+         int j = chunkZ - this.centerZ;
+-        if (i >= 0 && i < this.chunks.length && j >= 0 && j < this.chunks[i].length) {
++        if (i >= 0 && i < this.chunks.length && j >= 0 && j < this.chunks[i].length) { // Paper - if this changes, update getChunkIfLoaded below
+             ChunkAccess chunkAccess = this.chunks[i][j];
+             return (ChunkAccess)(chunkAccess != null ? chunkAccess : new EmptyLevelChunk(this.level, new ChunkPos(chunkX, chunkZ)));
+         } else {
+@@ -68,6 +69,30 @@ public class PathNavigationRegion implements BlockGetter, CollisionGetter {
+         }
      }
  
 +    // Paper start - if loaded util
-+    private ChunkAccess getChunkIfLoaded(int x, int z) {
-+        int k = x - this.centerX;
-+        int l = z - this.centerZ;
++    private @Nullable ChunkAccess getChunkIfLoaded(int x, int z) {
++        // Based on getChunk(int, int)
++        int xx = x - this.centerX;
++        int zz = z - this.centerZ;
 +
-+        if (k >= 0 && k < this.chunks.length && l >= 0 && l < this.chunks[k].length) { // Paper - if this changes, update getChunkIfLoaded below
-+            return this.chunks[k][l];
++        if (xx >= 0 && xx < this.chunks.length && zz >= 0 && zz < this.chunks[xx].length) {
++            return this.chunks[xx][zz];
 +        }
 +        return null;
 +    }
 +    @Override
-+    public FluidState getFluidIfLoaded(BlockPos blockposition) {
++    public final FluidState getFluidIfLoaded(BlockPos blockposition) {
 +        ChunkAccess chunk = getChunkIfLoaded(blockposition.getX() >> 4, blockposition.getZ() >> 4);
 +        return chunk == null ? null : chunk.getFluidState(blockposition);
 +    }
 +
 +    @Override
-+    public BlockState getTypeIfLoaded(BlockPos blockposition) {
++    public final BlockState getBlockStateIfLoaded(BlockPos blockposition) {
 +        ChunkAccess chunk = getChunkIfLoaded(blockposition.getX() >> 4, blockposition.getZ() >> 4);
 +        return chunk == null ? null : chunk.getBlockState(blockposition);
 +    }
 +    // Paper end
 +
-     @Nullable
      @Override
-     public BlockEntity getBlockEntity(BlockPos pos) {
+     public WorldBorder getWorldBorder() {
+         return this.level.getWorldBorder();
 diff --git a/src/main/java/net/minecraft/world/level/block/state/BlockBehaviour.java b/src/main/java/net/minecraft/world/level/block/state/BlockBehaviour.java
 index 0cb0b6143e3307e546c78ecda2c35ac31a8a7001..a3f44e3a44b2ec21ef41f6d598b428448c847c5f 100644
 --- a/src/main/java/net/minecraft/world/level/block/state/BlockBehaviour.java
@@ -6497,7 +6498,7 @@ index 0cb0b6143e3307e546c78ecda2c35ac31a8a7001..a3f44e3a44b2ec21ef41f6d598b42844
  
          public boolean useShapeForLightOcclusion() {
 diff --git a/src/main/java/net/minecraft/world/level/chunk/ChunkAccess.java b/src/main/java/net/minecraft/world/level/chunk/ChunkAccess.java
-index b44f4defb19554cecd75e839812cd2fca79a98b1..f529776a40744e18043b0e4a0df8873e6b920387 100644
+index bfcaaa69991342f71fba4df46f69aea2ec6adca7..0ea0690ab1d45f60a2b13cf8a69e580256992cdc 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/ChunkAccess.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/ChunkAccess.java
 @@ -58,7 +58,7 @@ public abstract class ChunkAccess implements BlockGetter, BiomeManager.NoiseBiom
@@ -6520,7 +6521,7 @@ index b44f4defb19554cecd75e839812cd2fca79a98b1..f529776a40744e18043b0e4a0df8873e
          this.levelHeightAccessor = heightLimitView;
          this.sections = new LevelChunkSection[heightLimitView.getSectionsCount()];
 diff --git a/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java b/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
-index 6d58f8baf53ac828da7097ff0140da2cf6dfe682..b61d9592f4a7e0e5c65cb9f317f2d1f3370311a4 100644
+index 28555314738ba891e0e36d3c85b1623116f743dd..f263022e1d15e78b51cfd148cf024b9a8c761898 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
 @@ -24,6 +24,7 @@ import net.minecraft.nbt.CompoundTag;
@@ -6537,7 +6538,7 @@ index 6d58f8baf53ac828da7097ff0140da2cf6dfe682..b61d9592f4a7e0e5c65cb9f317f2d1f3
  
 +    // Paper start
 +    public final com.destroystokyo.paper.util.maplist.EntityList entities = new com.destroystokyo.paper.util.maplist.EntityList();
-+    public ChunkHolder playerChunk;
++    public @Nullable ChunkHolder playerChunk;
 +
 +    static final int NEIGHBOUR_CACHE_RADIUS = 3;
 +    public static int getNeighbourCacheRadius() {
@@ -6642,18 +6643,18 @@ index 6d58f8baf53ac828da7097ff0140da2cf6dfe682..b61d9592f4a7e0e5c65cb9f317f2d1f3
      public LevelChunk(ServerLevel world, ProtoChunk protoChunk, @Nullable LevelChunk.PostLoadProcessor entityLoader) {
          this(world, protoChunk.getPos(), protoChunk.getUpgradeData(), protoChunk.unpackBlockTicks(), protoChunk.unpackFluidTicks(), protoChunk.getInhabitedTime(), protoChunk.getSections(), entityLoader, protoChunk.getBlendingData());
          Iterator iterator = protoChunk.getBlockEntities().values().iterator();
-@@ -226,6 +331,18 @@ public class LevelChunk extends ChunkAccess {
+@@ -225,6 +330,18 @@ public class LevelChunk extends ChunkAccess {
          }
      }
  
 +    // Paper start - If loaded util
 +    @Override
-+    public FluidState getFluidIfLoaded(BlockPos blockposition) {
++    public final FluidState getFluidIfLoaded(BlockPos blockposition) {
 +        return this.getFluidState(blockposition);
 +    }
 +
 +    @Override
-+    public BlockState getTypeIfLoaded(BlockPos blockposition) {
++    public final BlockState getBlockStateIfLoaded(BlockPos blockposition) {
 +        return this.getBlockState(blockposition);
 +    }
 +    // Paper end
@@ -6661,7 +6662,7 @@ index 6d58f8baf53ac828da7097ff0140da2cf6dfe682..b61d9592f4a7e0e5c65cb9f317f2d1f3
      @Override
      public FluidState getFluidState(BlockPos pos) {
          return this.getFluidState(pos.getX(), pos.getY(), pos.getZ());
-@@ -347,6 +464,7 @@ public class LevelChunk extends ChunkAccess {
+@@ -346,6 +463,7 @@ public class LevelChunk extends ChunkAccess {
          return this.getBlockEntity(pos, LevelChunk.EntityCreationType.CHECK);
      }
  
@@ -6669,7 +6670,7 @@ index 6d58f8baf53ac828da7097ff0140da2cf6dfe682..b61d9592f4a7e0e5c65cb9f317f2d1f3
      @Nullable
      public BlockEntity getBlockEntity(BlockPos pos, LevelChunk.EntityCreationType creationType) {
          // CraftBukkit start
-@@ -516,7 +634,25 @@ public class LevelChunk extends ChunkAccess {
+@@ -515,7 +633,25 @@ public class LevelChunk extends ChunkAccess {
  
      // CraftBukkit start
      public void loadCallback() {
@@ -6695,7 +6696,7 @@ index 6d58f8baf53ac828da7097ff0140da2cf6dfe682..b61d9592f4a7e0e5c65cb9f317f2d1f3
          if (server != null) {
              /*
               * If it's a new world, the first few chunks are generated inside
-@@ -555,6 +691,22 @@ public class LevelChunk extends ChunkAccess {
+@@ -554,6 +690,22 @@ public class LevelChunk extends ChunkAccess {
          server.getPluginManager().callEvent(unloadEvent);
          // note: saving can be prevented, but not forced if no saving is actually required
          this.mustNotSave = !unloadEvent.isSaveChunk();
@@ -6719,7 +6720,7 @@ index 6d58f8baf53ac828da7097ff0140da2cf6dfe682..b61d9592f4a7e0e5c65cb9f317f2d1f3
  
      @Override
 diff --git a/src/main/java/net/minecraft/world/level/chunk/ProtoChunk.java b/src/main/java/net/minecraft/world/level/chunk/ProtoChunk.java
-index 1ea0048e1ee5321a1fd1584ac5371a371de9d45f..b7dbdcb0ce7948c6f98ec67d0cf2033a8e348085 100644
+index 1ea0048e1ee5321a1fd1584ac5371a371de9d45f..41530d0b759604716f739d10f41627871f2ba319 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/ProtoChunk.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/ProtoChunk.java
 @@ -73,6 +73,18 @@ public class ProtoChunk extends ChunkAccess {
@@ -6728,12 +6729,12 @@ index 1ea0048e1ee5321a1fd1584ac5371a371de9d45f..b7dbdcb0ce7948c6f98ec67d0cf2033a
  
 +    // Paper start - If loaded util
 +    @Override
-+    public FluidState getFluidIfLoaded(BlockPos blockposition) {
++    public final FluidState getFluidIfLoaded(BlockPos blockposition) {
 +        return this.getFluidState(blockposition);
 +    }
 +
 +    @Override
-+    public BlockState getTypeIfLoaded(BlockPos blockposition) {
++    public final BlockState getBlockStateIfLoaded(BlockPos blockposition) {
 +        return this.getBlockState(blockposition);
 +    }
 +    // Paper end
@@ -7001,7 +7002,7 @@ index 9d57eda5d5c16004776c2e23837425cfe9184476..b39819d579c548318f1539702fb2df97
  
      public static byte toLegacyData(BlockState data) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/DummyGeneratorAccess.java b/src/main/java/org/bukkit/craftbukkit/util/DummyGeneratorAccess.java
-index 939789831f14621800c6792d20119079fc51b6f1..aff1a282516119e0f6026f1b35d6ee72859e8670 100644
+index 939789831f14621800c6792d20119079fc51b6f1..9ab8159975f58a0014edbe3a368490b3590882ea 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/DummyGeneratorAccess.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/DummyGeneratorAccess.java
 @@ -212,7 +212,23 @@ public class DummyGeneratorAccess implements WorldGenLevel {
@@ -7016,7 +7017,7 @@ index 939789831f14621800c6792d20119079fc51b6f1..aff1a282516119e0f6026f1b35d6ee72
 +    }
 +
 +    @Override
-+    public BlockState getTypeIfLoaded(BlockPos blockposition) {
++    public BlockState getBlockStateIfLoaded(BlockPos blockposition) {
 +        throw new UnsupportedOperationException("Not supported yet.");
 +    }
  
