@@ -1,0 +1,102 @@
+# PaperSand Auto compile + setup a development release
+#
+
+name: Build/Test Paper - Release a development version
+on: [push]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                java: [17]
+            fail-fast: true
+        steps:
+            - uses: actions/checkout@v2.3.5
+            - name: JDK ${{ matrix.java }}
+              uses: actions/setup-java@v2.3.1
+              with:
+                  java-version: ${{ matrix.java }}
+                  cache: 'gradle'
+                  distribution: 'temurin'
+            - name: Set up Python 3.7
+              uses: actions/setup-python@v1
+              with:
+                  python-version: "3.7"
+            - name: Patch and Build
+              run: |
+                  git config --global user.email "no-reply@github.com"
+                  git config --global user.name "Github Actions"
+                  ./gradlew applyPatches --stacktrace
+                  ./gradlew build --stacktrace
+            - name: Compile Jar Files
+              run: |
+                  ./gradlew createReobfPaperclipJar --stacktrace
+            - name: Create Artifact Folder
+              run: mkdir artifact
+            - name: Fetch Jar File
+              id: pl
+              uses: Rishabh510/Path-lister-action@master
+              with:
+                  path: "build/libs/"
+                  type: ".jar"
+
+            - name: Results
+              id: vars
+              run: |
+                  for i in ${{ steps.pl.outputs.paths }}; do
+                  if [[ $i == *"paper-paperclip"* ]]
+                  then
+                  echo "::set-output name=destinationFileName::$i"
+                  fi
+                  done
+            - name: Format Filename Part 1
+              uses: mad9000/actions-find-and-replace-string@1
+              id: findandreplace
+              with:
+                  source: ${{ steps.vars.outputs.destinationFileName }}
+                  find: 'build/libs//paper-paperclip-'
+                  replace: ''
+              
+            - name: Format Filename Part 2
+              uses: mad9000/actions-find-and-replace-string@1
+              id: findandreplace2
+              with:
+                  source: ${{ steps.findandreplace.outputs.value }}
+                  find: '-R0.1-SNAPSHOT-reobf.jar'
+                  replace: ''
+            - name: Results after Replace
+              id: vars2
+              run: | 
+                echo "The replaced value is ${{ steps.findandreplace2.outputs.value }}"
+                echo "::set-output name=destinationFileNameVersion::${{ steps.findandreplace2.outputs.value }}"
+            - name: Copy Jar File to Artifact Folder
+              uses: canastro/copy-file-action@master
+              with:
+                  source: "build/libs/paper-paperclip-${{ steps.vars2.outputs.destinationFileNameVersion }}-R0.1-SNAPSHOT-reobf.jar"
+                  target: "artifact/PaperSandServer-${{ steps.vars2.outputs.destinationFileNameVersion }}-v${{ github.run_number }}.jar"
+            - name: Create GitHub Release
+              uses: actions/create-release@v1
+              id: create_release
+              with:
+                  draft: false
+                  prerelease: false
+                  release_name: ${{ steps.vars2.outputs.destinationFileNameVersion }} v${{ github.run_number }} - Development Build
+                  tag_name: ${{ steps.vars2.outputs.destinationFileNameVersion }}-v${{ github.run_number }}
+                  body_path: PRERELEASE.md
+              env:
+                  GITHUB_TOKEN: ${{ github.token }}
+            - name: Upload Artifact to Release
+              uses: actions/upload-release-asset@v1
+              env:
+                  GITHUB_TOKEN: ${{ github.token }}
+              with:
+                  upload_url: ${{ steps.create_release.outputs.upload_url }}
+                  asset_path: ./artifact/PaperSandServer-${{ steps.vars2.outputs.destinationFileNameVersion }}-v${{ github.run_number }}.jar
+                  asset_name: PaperSandServer-${{ steps.vars2.outputs.destinationFileNameVersion }}-v${{ github.run_number }}.jar
+                  asset_content_type: application/java-archive
+            - name: Upload Artifact
+              uses: actions/upload-artifact@v2
+              with: 
+                  name: PaperSand-${{ steps.vars2.outputs.destinationFileNameVersion }}-v${{ github.run_number }}
+                  path: artifact
