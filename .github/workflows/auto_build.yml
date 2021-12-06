@@ -1,4 +1,4 @@
-name: Scheduled release a nightly release
+name: Scheduled release a nightly release 
 on:
   schedule:
     - cron: '0 0 * * *'
