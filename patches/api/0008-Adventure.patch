@@ -7,14 +7,14 @@ Co-authored-by: zml <zml@stellardrift.ca>
 Co-authored-by: Jake Potrebic <jake.m.potrebic@gmail.com>
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 55ee0c6330e4dbba22b4044346d1e1dd39c745ce..80fdd05dd593455ca89b66636ed30f1d9facf4ed 100644
+index 98afa6a25131dc626ea7a5122f33df6bd2d39178..bacb5650f03827ac55f8c8c33f6ffda5b029a8a4 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -8,6 +8,19 @@ java {
      withJavadocJar()
  }
  
-+val adventureVersion = "4.9.3"
++val adventureVersion = "4.10.0"
 +val apiAndDocs: Configuration by configurations.creating {
 +    attributes {
 +        attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category.DOCUMENTATION))
@@ -30,33 +30,20 @@ index 55ee0c6330e4dbba22b4044346d1e1dd39c745ce..80fdd05dd593455ca89b66636ed30f1d
  dependencies {
      // api dependencies are listed transitively to API consumers
      api("commons-lang:commons-lang:2.6")
-@@ -20,6 +33,11 @@ dependencies {
+@@ -20,6 +33,12 @@ dependencies {
          isTransitive = false // includes junit
      }
      api("it.unimi.dsi:fastutil:8.5.6")
 +    apiAndDocs(platform("net.kyori:adventure-bom:$adventureVersion"))
 +    apiAndDocs("net.kyori:adventure-api")
++    apiAndDocs("net.kyori:adventure-text-minimessage")
 +    apiAndDocs("net.kyori:adventure-text-serializer-gson")
 +    apiAndDocs("net.kyori:adventure-text-serializer-legacy")
 +    apiAndDocs("net.kyori:adventure-text-serializer-plain")
      // Paper end
  
      compileOnly("org.apache.maven:maven-resolver-provider:3.8.4")
-@@ -70,10 +88,25 @@ tasks.jar {
- }
- 
- tasks.withType<Javadoc> {
-+    inputs.files(apiAndDocs)
-+        .ignoreEmptyDirectories()
-+        .withPropertyName(apiAndDocs.name + "-configuration")
-+    doFirst {
-+        (options as CoreJavadocOptions).addStringOption(
-+            "sourcepath",
-+            apiAndDocs.resolvedConfiguration.files.joinToString(separator = File.pathSeparator, transform = File::getPath)
-+        )
-+    }
-     (options as StandardJavadocDocletOptions).links(
-         "https://guava.dev/releases/31.0.1-jre/api/docs/",
+@@ -78,8 +97,22 @@ tasks.withType<Javadoc> {
          "https://javadoc.io/doc/org.yaml/snakeyaml/1.30/",
          "https://javadoc.io/doc/org.jetbrains/annotations/23.0.0/", // Paper - we don't want Java 5 annotations
          "https://javadoc.io/doc/net.md-5/bungeecord-chat/1.16-R0.4/",
@@ -67,7 +54,18 @@ index 55ee0c6330e4dbba22b4044346d1e1dd39c745ce..80fdd05dd593455ca89b66636ed30f1d
 +        "https://jd.adventure.kyori.net/text-serializer-plain/$adventureVersion/",
 +        // Paper end
      )
- }
+ 
++    inputs.files(apiAndDocs).ignoreEmptyDirectories().withPropertyName(apiAndDocs.name + "-configuration")
++    doFirst {
++        options.addStringOption(
++            "sourcepath",
++            apiAndDocs.resolvedConfiguration.files.joinToString(separator = File.pathSeparator, transform = File::getPath)
++        )
++    }
++
+     // workaround for https://github.com/gradle/gradle/issues/4046
+     inputs.dir("src/main/javadoc").withPropertyName("javadoc-sourceset")
+     doLast {
 diff --git a/src/main/java/co/aikar/timings/TimingsReportListener.java b/src/main/java/co/aikar/timings/TimingsReportListener.java
 index ef58a6c00f444bd498a2d8fc4e457236f393954f..ecd149157d4fb80444f34bf5633d74bcdb63dec5 100644
 --- a/src/main/java/co/aikar/timings/TimingsReportListener.java
@@ -1126,16 +1124,16 @@ index ac5e263d737973af077e3406a84a84baca4370db..2d91924b7f5ef16a91d40cdc1bfc3d68
 +    // Paper end
  }
 diff --git a/src/main/java/org/bukkit/UnsafeValues.java b/src/main/java/org/bukkit/UnsafeValues.java
-index 93345eaf4bd987490d32f9e60ab54140dbeda5c4..e9306f581b733b717efa932408cf9d74da4d911d 100644
+index dca2d5045eb52d3d654d5673732761b0575871b4..ce5794d684a1126ec9acbf4af17f5d6fa783f551 100644
 --- a/src/main/java/org/bukkit/UnsafeValues.java
 +++ b/src/main/java/org/bukkit/UnsafeValues.java
-@@ -21,6 +21,14 @@ import org.bukkit.plugin.PluginDescriptionFile;
+@@ -22,6 +22,14 @@ import org.bukkit.plugin.PluginDescriptionFile;
   */
  @Deprecated
  public interface UnsafeValues {
 +    // Paper start
 +    net.kyori.adventure.text.flattener.ComponentFlattener componentFlattener();
-+    net.kyori.adventure.text.serializer.plain.PlainComponentSerializer plainComponentSerializer();
++    @Deprecated net.kyori.adventure.text.serializer.plain.PlainComponentSerializer plainComponentSerializer();
 +    net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer plainTextSerializer();
 +    net.kyori.adventure.text.serializer.gson.GsonComponentSerializer gsonComponentSerializer();
 +    net.kyori.adventure.text.serializer.gson.GsonComponentSerializer colorDownsamplingGsonComponentSerializer();

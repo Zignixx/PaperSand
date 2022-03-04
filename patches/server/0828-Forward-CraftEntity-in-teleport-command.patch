@@ -5,10 +5,10 @@ Subject: [PATCH] Forward CraftEntity in teleport command
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index fe6f2ec41c521c8f1ac17aa3af8bb7f7375e5a02..9b5bd68f328306e26eced7d3112b2c01301b543b 100644
+index 98a8a00d55f87fb210fa6d3825a7ff476f601021..27eb30d02d08ff61fb9916961d99e4ce01341290 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -3168,6 +3168,13 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, i
+@@ -3203,6 +3203,13 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, i
      }
  
      public void restoreFrom(Entity original) {
@@ -22,7 +22,7 @@ index fe6f2ec41c521c8f1ac17aa3af8bb7f7375e5a02..9b5bd68f328306e26eced7d3112b2c01
          CompoundTag nbttagcompound = original.saveWithoutId(new CompoundTag());
  
          nbttagcompound.remove("Dimension");
-@@ -3249,10 +3256,10 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, i
+@@ -3284,10 +3291,10 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, i
                      if (worldserver.getTypeKey() == LevelStem.END) { // CraftBukkit
                          ServerLevel.makeObsidianPlatform(worldserver, this); // CraftBukkit
                      }
