@@ -67,10 +67,10 @@ determined by the number of players on the server multiplied by the
 whatever `global-max-concurrent-loads` is configured to.
 
 diff --git a/src/main/java/co/aikar/timings/TimingsExport.java b/src/main/java/co/aikar/timings/TimingsExport.java
-index 5e3b7fb2e0b7608610555cd23e7ad25a05883181..1cb0aae3e0c619a715766e0fa604dfd9a8caefcc 100644
+index 309dbf5fce3ce940d5e1b57d267b9d6b2c5ff5b6..5ba64e1083b7cb1eec64d1925095c6ca5865ff07 100644
 --- a/src/main/java/co/aikar/timings/TimingsExport.java
 +++ b/src/main/java/co/aikar/timings/TimingsExport.java
-@@ -152,7 +152,11 @@ public class TimingsExport extends Thread {
+@@ -159,7 +159,11 @@ public class TimingsExport extends Thread {
                  pair("gamerules", toObjectMapper(world.getWorld().getGameRules(), rule -> {
                      return pair(rule, world.getWorld().getGameRuleValue(rule));
                  })),
@@ -1381,7 +1381,7 @@ index 36b6e7295cf7484675c8c2b9624c1f6fea7aed1d..38db3905f47fefb5c958fa24aef2313e
  
      public CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>> getOrScheduleFuture(ChunkStatus targetStatus, ChunkMap chunkStorage) {
 diff --git a/src/main/java/net/minecraft/server/level/ChunkMap.java b/src/main/java/net/minecraft/server/level/ChunkMap.java
-index a29b97f941eadb1ede5db805d32f2917469cccb9..edc6235288f0843608dae4552e05915e4067cbf2 100644
+index a29b97f941eadb1ede5db805d32f2917469cccb9..eb469eabf7a5888a4249a6267de0c993e65b2ad0 100644
 --- a/src/main/java/net/minecraft/server/level/ChunkMap.java
 +++ b/src/main/java/net/minecraft/server/level/ChunkMap.java
 @@ -217,6 +217,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
@@ -1467,7 +1467,7 @@ index a29b97f941eadb1ede5db805d32f2917469cccb9..edc6235288f0843608dae4552e05915e
 -                    this.updateChunkTracking(entityplayer, chunkcoordintpair, mutableobject, flag, flag1);
 -                });
 -            }
-+            this.playerChunkManager.setLoadDistance(Mth.clamp(this.viewDistance, 2, 32)); // Paper - replace player loader system
++            this.playerChunkManager.setLoadDistance(this.viewDistance); // Paper - replace player loader system
          }
  
      }
