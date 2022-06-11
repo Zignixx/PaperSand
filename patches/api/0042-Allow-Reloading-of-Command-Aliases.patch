@@ -56,10 +56,10 @@ index bd2c7a6964722412148fae39e1b4951fc0002b9b..864c263bbd4dd6dd7c37a74b39b1a40a
 +    // Paper end
  }
 diff --git a/src/main/java/org/bukkit/command/SimpleCommandMap.java b/src/main/java/org/bukkit/command/SimpleCommandMap.java
-index adfc7aae2c0f49bbcdd358e83b04a0cf078a7d52..460fda05a62b12db2edcfb7ea8b2a5dd8e4b110d 100644
+index 2e23c124311b38aaea64dd274c33afcd52edcf43..950a2d0b3b583c6b9a703190874bbc4df2783ab7 100644
 --- a/src/main/java/org/bukkit/command/SimpleCommandMap.java
 +++ b/src/main/java/org/bukkit/command/SimpleCommandMap.java
-@@ -297,4 +297,11 @@ public class SimpleCommandMap implements CommandMap {
+@@ -293,4 +293,11 @@ public class SimpleCommandMap implements CommandMap {
              }
          }
      }

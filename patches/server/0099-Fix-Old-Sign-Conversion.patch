@@ -21,7 +21,7 @@ index c518704386f14cd033307dd976455c35760d7236..148e79ae4e24fe16dbbb17550c3f258d
      private final BlockEntityType<?> type;
      @Nullable
 diff --git a/src/main/java/net/minecraft/world/level/block/entity/SignBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/SignBlockEntity.java
-index e390cfea5bed64284a97c88a717503f07f073a30..3a2e2adeefe73981b443216724270023408c1feb 100644
+index 715873e52708762b25c29caf6d41d7cb8f79ce57..39bd98b9496e4a27fd69a2de7c83c40689017ebc 100644
 --- a/src/main/java/net/minecraft/world/level/block/entity/SignBlockEntity.java
 +++ b/src/main/java/net/minecraft/world/level/block/entity/SignBlockEntity.java
 @@ -93,7 +93,7 @@ public class SignBlockEntity extends BlockEntity implements CommandSource { // C
@@ -34,7 +34,7 @@ index e390cfea5bed64284a97c88a717503f07f073a30..3a2e2adeefe73981b443216724270023
                  continue;
              }
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/structure/templatesystem/StructureTemplate.java b/src/main/java/net/minecraft/world/level/levelgen/structure/templatesystem/StructureTemplate.java
-index cf8a38b7d55d229ac556f8a93b25c155381df3a2..129ebb095c2280376a59b54920e5ff90cf1f465a 100644
+index 71206f52a234a17db13062d975cbf66d1ffebc9a..f3fcd345178efd4917ef79cb141275a987f99e58 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/structure/templatesystem/StructureTemplate.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/structure/templatesystem/StructureTemplate.java
 @@ -284,7 +284,9 @@ public class StructureTemplate {

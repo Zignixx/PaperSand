@@ -18,19 +18,10 @@ For consistency, the old API methods now forward to use the
 ItemMeta API equivalents, and should deprecate the old API's.
 
 diff --git a/src/main/java/net/minecraft/world/item/ItemStack.java b/src/main/java/net/minecraft/world/item/ItemStack.java
-index 1a52db84d9630a095347a85e136a9ad118f77325..d66cc030dcd3d98f57803938c8c06342a028ee88 100644
+index 7f778e037c1821cc45236bf2a95c28243d0ec126..758f0a620551838e32d5c68f7ee755f7ea374a46 100644
 --- a/src/main/java/net/minecraft/world/item/ItemStack.java
 +++ b/src/main/java/net/minecraft/world/item/ItemStack.java
-@@ -14,6 +14,8 @@ import java.text.DecimalFormatSymbols;
- import java.util.Collection;
- import java.util.Iterator;
- import java.util.List;
-+import java.util.Collections;
-+import java.util.Comparator;
- import java.util.Locale;
- import java.util.Map.Entry;
- import java.util.Optional;
-@@ -153,6 +155,23 @@ public final class ItemStack {
+@@ -151,6 +151,23 @@ public final class ItemStack {
          return this.getItem().getTooltipImage(this);
      }
  
@@ -46,7 +37,7 @@ index 1a52db84d9630a095347a85e136a9ad118f77325..d66cc030dcd3d98f57803938c8c06342
 +        }
 +        try {
 +            //noinspection unchecked
-+            list.sort((Comparator<? super net.minecraft.nbt.Tag>) enchantSorter); // Paper
++            list.sort((java.util.Comparator<? super net.minecraft.nbt.Tag>) enchantSorter); // Paper
 +        } catch (Exception ignored) {}
 +    }
 +    // Paper end
@@ -54,7 +45,7 @@ index 1a52db84d9630a095347a85e136a9ad118f77325..d66cc030dcd3d98f57803938c8c06342
      public ItemStack(ItemLike item) {
          this(item, 1);
      }
-@@ -200,6 +219,7 @@ public final class ItemStack {
+@@ -202,6 +219,7 @@ public final class ItemStack {
              // CraftBukkit start - make defensive copy as this data may be coming from the save thread
              this.tag = nbttagcompound.getCompound("tag").copy();
              // CraftBukkit end
@@ -62,7 +53,7 @@ index 1a52db84d9630a095347a85e136a9ad118f77325..d66cc030dcd3d98f57803938c8c06342
              this.getItem().verifyTagAfterLoad(this.tag);
          }
  
-@@ -758,6 +778,7 @@ public final class ItemStack {
+@@ -772,6 +790,7 @@ public final class ItemStack {
  
      public void setTag(@Nullable CompoundTag nbt) {
          this.tag = nbt;
@@ -70,7 +61,7 @@ index 1a52db84d9630a095347a85e136a9ad118f77325..d66cc030dcd3d98f57803938c8c06342
          if (this.getItem().canBeDepleted()) {
              this.setDamageValue(this.getDamageValue());
          }
-@@ -1063,6 +1084,7 @@ public final class ItemStack {
+@@ -1061,6 +1080,7 @@ public final class ItemStack {
          ListTag nbttaglist = this.tag.getList("Enchantments", 10);
  
          nbttaglist.add(EnchantmentHelper.storeEnchantment(EnchantmentHelper.getEnchantmentId(enchantment), (byte) level));
@@ -79,7 +70,7 @@ index 1a52db84d9630a095347a85e136a9ad118f77325..d66cc030dcd3d98f57803938c8c06342
  
      public boolean isEnchanted() {
 diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java
-index e88df908377450964ae5b6ff97ee97bd2f09c05f..ba70ac49222c517a38e20e86cee1fd38aecb6318 100644
+index 4b79b96579efbc4dd9a10e7183ed08b73b488794..3745033afb8923ce06cbf13b55c4e96f2a89573f 100644
 --- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java
 +++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java
 @@ -6,7 +6,6 @@ import java.util.Map;
@@ -203,7 +194,7 @@ index e88df908377450964ae5b6ff97ee97bd2f09c05f..ba70ac49222c517a38e20e86cee1fd38
  
      static Map<Enchantment, Integer> getEnchantments(net.minecraft.world.item.ItemStack item) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java
-index b42527e0307811a3697f6e7b0afc9a10527acbaf..20d10e5b54edaf1c5212bbc33b8cd1aa426fa826 100644
+index 0a5f063bc74e1dae67167537437ebd7e4ddf113a..4d687fa31f4d889ac755c178b9afd2b927c78ee2 100644
 --- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java
 +++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java
 @@ -6,6 +6,7 @@ import com.google.common.collect.ImmutableList;

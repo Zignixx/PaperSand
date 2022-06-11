@@ -6,7 +6,7 @@ Subject: [PATCH] Remove upstream snakeyaml fix
 See Server Patch: Fix saving configs with more long comments
 
 diff --git a/src/main/java/org/bukkit/configuration/file/YamlConfiguration.java b/src/main/java/org/bukkit/configuration/file/YamlConfiguration.java
-index f9abe6991dadc7c652dcf6682bdb1b43240af438..9ba2e956be80952c146bac9a03bdb837f92b2726 100644
+index 21d73587e535c43e13473e441dea6fe86c3bf266..0a03cefda788b1dc57ddd61914492a15788aa3d5 100644
 --- a/src/main/java/org/bukkit/configuration/file/YamlConfiguration.java
 +++ b/src/main/java/org/bukkit/configuration/file/YamlConfiguration.java
 @@ -65,7 +65,7 @@ public class YamlConfiguration extends FileConfiguration {

@@ -6,10 +6,10 @@ Subject: [PATCH] Prevent logins from being processed when the player has
 
 
 diff --git a/src/main/java/net/minecraft/server/network/ServerLoginPacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerLoginPacketListenerImpl.java
-index 6834c67b38f0679497bef4b2174817d9688cbbd8..73efc3084b04914f7f06875651269fd584b60989 100644
+index 9fe3ec7e6bd194b825a1b29bcff9fcd5e21f22ad..5bf48f4fb0794a1eaea3783add9e5852997434f6 100644
 --- a/src/main/java/net/minecraft/server/network/ServerLoginPacketListenerImpl.java
 +++ b/src/main/java/net/minecraft/server/network/ServerLoginPacketListenerImpl.java
-@@ -75,7 +75,11 @@ public class ServerLoginPacketListenerImpl implements ServerLoginPacketListener
+@@ -86,7 +86,11 @@ public class ServerLoginPacketListenerImpl implements ServerLoginPacketListener
          }
          // Paper end
          if (this.state == ServerLoginPacketListenerImpl.State.READY_TO_ACCEPT) {

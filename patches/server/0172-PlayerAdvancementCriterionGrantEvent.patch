@@ -5,10 +5,10 @@ Subject: [PATCH] PlayerAdvancementCriterionGrantEvent
 
 
 diff --git a/src/main/java/net/minecraft/server/PlayerAdvancements.java b/src/main/java/net/minecraft/server/PlayerAdvancements.java
-index e5ffc18cbd107b9fd20a9781f6f1979e9598378f..ecd62d2625bc5def3ac68f642f2c6f156060f129 100644
+index e4d7bc72545971ce9b74cce18e9b79abef9fefb7..4591364057110b8abe6cc669b76918096cb6b776 100644
 --- a/src/main/java/net/minecraft/server/PlayerAdvancements.java
 +++ b/src/main/java/net/minecraft/server/PlayerAdvancements.java
-@@ -277,6 +277,12 @@ public class PlayerAdvancements {
+@@ -276,6 +276,12 @@ public class PlayerAdvancements {
          boolean flag1 = advancementprogress.isDone();
  
          if (advancementprogress.grantProgress(criterionName)) {

@@ -5,10 +5,10 @@ Subject: [PATCH] handle NaN health/absorb values and repair bad data
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index c5a24e50b4314b2eae63c50a6575ab3ba8165ef8..c358c3d20669a9063439cee4a77555b5aa43bbf2 100644
+index ef820cd573a3c2366698df658dd8de6981c95e73..e9747640adff75df331e794f08397619379ae280 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -761,7 +761,13 @@ public abstract class LivingEntity extends Entity {
+@@ -784,7 +784,13 @@ public abstract class LivingEntity extends Entity {
  
      @Override
      public void readAdditionalSaveData(CompoundTag nbt) {
@@ -23,7 +23,7 @@ index c5a24e50b4314b2eae63c50a6575ab3ba8165ef8..c358c3d20669a9063439cee4a77555b5
          if (nbt.contains("Attributes", 9) && this.level != null && !this.level.isClientSide) {
              this.getAttributes().load(nbt.getList("Attributes", 10));
          }
-@@ -1248,6 +1254,10 @@ public abstract class LivingEntity extends Entity {
+@@ -1271,6 +1277,10 @@ public abstract class LivingEntity extends Entity {
      }
  
      public void setHealth(float health) {
@@ -34,7 +34,7 @@ index c5a24e50b4314b2eae63c50a6575ab3ba8165ef8..c358c3d20669a9063439cee4a77555b5
          // CraftBukkit start - Handle scaled health
          if (this instanceof ServerPlayer) {
              org.bukkit.craftbukkit.entity.CraftPlayer player = ((ServerPlayer) this).getBukkitEntity();
-@@ -3386,7 +3396,7 @@ public abstract class LivingEntity extends Entity {
+@@ -3419,7 +3429,7 @@ public abstract class LivingEntity extends Entity {
      }
  
      public void setAbsorptionAmount(float amount) {
@@ -44,10 +44,10 @@ index c5a24e50b4314b2eae63c50a6575ab3ba8165ef8..c358c3d20669a9063439cee4a77555b5
          }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 47c2f02a47804da12e380e6ceecac2fc147df1b5..9c69ea97f00791b0757db93fa9a6a5eb03577864 100644
+index 6b542ea548b078ca41f347614d25bcf00d30a87f..213037a4c545db70ca5e66018057216cbb6532d3 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -1916,6 +1916,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1913,6 +1913,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
      }
  
      public void setRealHealth(double health) {

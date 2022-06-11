@@ -6,10 +6,10 @@ Subject: [PATCH] Avoid blocking on Network Manager creation
 Per Paper issue 294
 
 diff --git a/src/main/java/net/minecraft/server/network/ServerConnectionListener.java b/src/main/java/net/minecraft/server/network/ServerConnectionListener.java
-index 522aa6a0b4b365a78cf3fce2604d71fb88d30388..e174d9803e557470068f7893260d55a042888517 100644
+index 0b657174309b6eaee0c8a2d6c17dd467d278739c..5e1a6f2cd2d0d9c6b17c446fa782e4089cc138d5 100644
 --- a/src/main/java/net/minecraft/server/network/ServerConnectionListener.java
 +++ b/src/main/java/net/minecraft/server/network/ServerConnectionListener.java
-@@ -61,6 +61,15 @@ public class ServerConnectionListener {
+@@ -62,6 +62,15 @@ public class ServerConnectionListener {
      public volatile boolean running;
      private final List<ChannelFuture> channels = Collections.synchronizedList(Lists.newArrayList());
      final List<Connection> connections = Collections.synchronizedList(Lists.newArrayList());
@@ -25,7 +25,7 @@ index 522aa6a0b4b365a78cf3fce2604d71fb88d30388..e174d9803e557470068f7893260d55a0
  
      public ServerConnectionListener(MinecraftServer server) {
          this.server = server;
-@@ -96,7 +105,8 @@ public class ServerConnectionListener {
+@@ -97,7 +106,8 @@ public class ServerConnectionListener {
                      int j = ServerConnectionListener.this.server.getRateLimitPacketsPerSecond();
                      Object object = j > 0 ? new RateKickingConnection(j) : new Connection(PacketFlow.SERVERBOUND);
  
@@ -35,7 +35,7 @@ index 522aa6a0b4b365a78cf3fce2604d71fb88d30388..e174d9803e557470068f7893260d55a0
                      channel.pipeline().addLast("packet_handler", (ChannelHandler) object);
                      ((Connection) object).setListener(new ServerHandshakePacketListenerImpl(ServerConnectionListener.this.server, (Connection) object));
                  }
-@@ -155,6 +165,7 @@ public class ServerConnectionListener {
+@@ -156,6 +166,7 @@ public class ServerConnectionListener {
  
          synchronized (this.connections) {
              // Spigot Start

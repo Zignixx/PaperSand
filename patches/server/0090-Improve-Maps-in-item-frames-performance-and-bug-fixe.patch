@@ -13,10 +13,10 @@ custom renderers are in use, defaulting to the much simpler Vanilla system.
 Additionally, numerous issues to player position tracking on maps has been fixed.
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index 317ae71b8b9318a8bfe243b7b316f84566b88bf9..9769977c9db77aa52b99b793ca4f5d0c7b54528f 100644
+index 47511f73b9924e48b4427ba9a245fb62d824626d..e4d6fe5f19a575acfb08fcb8335f7519ed73b295 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
-@@ -2057,6 +2057,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -2139,6 +2139,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
                              {
                                  if ( iter.next().player == entity )
                                  {
@@ -25,32 +25,16 @@ index 317ae71b8b9318a8bfe243b7b316f84566b88bf9..9769977c9db77aa52b99b793ca4f5d0c
                                  }
                              }
 diff --git a/src/main/java/net/minecraft/world/entity/player/Player.java b/src/main/java/net/minecraft/world/entity/player/Player.java
-index 067513b240db88b818bd26d74c31fb5f8ee80f5d..df753a2d39332464f16207615175bc95d35f61e8 100644
+index 24456bbf2cd9f1878cf545e8d164ff524c321a4c..fdda98cb38ec96d0189931c41257cc01966373d5 100644
 --- a/src/main/java/net/minecraft/world/entity/player/Player.java
 +++ b/src/main/java/net/minecraft/world/entity/player/Player.java
-@@ -88,6 +88,7 @@ import net.minecraft.world.item.ElytraItem;
- import net.minecraft.world.item.ItemCooldowns;
- import net.minecraft.world.item.ItemStack;
- import net.minecraft.world.item.Items;
-+import net.minecraft.world.item.MapItem; // Paper
- import net.minecraft.world.item.ProjectileWeaponItem;
- import net.minecraft.world.item.SwordItem;
- import net.minecraft.world.item.crafting.Recipe;
-@@ -106,6 +107,7 @@ import net.minecraft.world.level.block.entity.SignBlockEntity;
- import net.minecraft.world.level.block.entity.StructureBlockEntity;
- import net.minecraft.world.level.block.state.BlockState;
- import net.minecraft.world.level.block.state.pattern.BlockInWorld;
-+import net.minecraft.world.level.saveddata.maps.MapItemSavedData; // Paper
- import net.minecraft.world.phys.AABB;
- import net.minecraft.world.phys.Vec3;
- import net.minecraft.world.scores.PlayerTeam;
-@@ -750,6 +752,14 @@ public abstract class Player extends LivingEntity {
+@@ -762,6 +762,14 @@ public abstract class Player extends LivingEntity {
                  return null;
              }
              // CraftBukkit end
 +            // Paper start - remove player from map on drop
 +            if (itemstack.getItem() == Items.FILLED_MAP) {
-+                MapItemSavedData worldmap = MapItem.getSavedData(itemstack, this.level);
++                net.minecraft.world.level.saveddata.maps.MapItemSavedData worldmap = net.minecraft.world.item.MapItem.getSavedData(itemstack, this.level);
 +                if (worldmap != null) {
 +                    worldmap.tickCarriedBy(this, itemstack);
 +                }

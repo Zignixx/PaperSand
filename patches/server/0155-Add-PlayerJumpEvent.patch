@@ -5,10 +5,10 @@ Subject: [PATCH] Add PlayerJumpEvent
 
 
 diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-index f38c6482651cb9a8a8dc2a25c55aaf2a7deccc7b..f52fcfc8763bff9635eb117a201cc954cc7f8154 100644
+index 8481e16454fbee019f0c8f3c9371576cbfc48d07..c5ab3ee4525f8eb611f273ff35d1b91787bc95b8 100644
 --- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 +++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-@@ -1186,7 +1186,34 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
+@@ -1217,7 +1217,34 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
                              boolean flag = d8 > 0.0D;
  
                              if (this.player.isOnGround() && !packet.isOnGround() && flag) {

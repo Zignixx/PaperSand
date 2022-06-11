@@ -5,10 +5,10 @@ Subject: [PATCH] Entity AddTo/RemoveFrom World Events
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index 93c967efbcdbc44f3729d7a70e90847212daa647..317ae71b8b9318a8bfe243b7b316f84566b88bf9 100644
+index 12ab01bae716b72bed1fa4417af4643586d15c5d..f7270a563835cf43239cdb43bb20cda23053de67 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
-@@ -2037,6 +2037,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -2118,6 +2118,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
                  entity.setOrigin(entity.getOriginVector().toLocation(getWorld()));
              }
              // Paper end
@@ -16,11 +16,11 @@ index 93c967efbcdbc44f3729d7a70e90847212daa647..317ae71b8b9318a8bfe243b7b316f845
          }
  
          public void onTrackingEnd(Entity entity) {
-@@ -2117,6 +2118,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -2193,6 +2194,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
                  }
              }
              // CraftBukkit end
 +            new com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent(entity.getBukkitEntity()).callEvent(); // Paper - fire while valid
          }
-     }
- }
+ 
+         public void onSectionChange(Entity entity) {

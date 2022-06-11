@@ -7,10 +7,10 @@ Co-authored-by: zml <zml@stellardrift.ca>
 Co-authored-by: Jake Potrebic <jake.m.potrebic@gmail.com>
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 98afa6a25131dc626ea7a5122f33df6bd2d39178..eefc024acc3e14ae21855df7f2f358bd1e0a9e38 100644
+index f0423df165bf7d0f3fad21d26b64f31ba3e6aeee..6f31679c2944fae3b37847c683abb0d2e5791449 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
-@@ -8,18 +8,37 @@ java {
+@@ -8,17 +8,36 @@ java {
      withJavadocJar()
  }
  
@@ -29,7 +29,6 @@ index 98afa6a25131dc626ea7a5122f33df6bd2d39178..eefc024acc3e14ae21855df7f2f358bd
 +
  dependencies {
      // api dependencies are listed transitively to API consumers
-     api("commons-lang:commons-lang:2.6")
      api("com.google.guava:guava:31.0.1-jre")
      api("com.google.code.gson:gson:2.8.9")
 -    api("net.md-5:bungeecord-chat:1.16-R0.4")
@@ -48,7 +47,7 @@ index 98afa6a25131dc626ea7a5122f33df6bd2d39178..eefc024acc3e14ae21855df7f2f358bd
 +    apiAndDocs("net.kyori:adventure-text-serializer-plain")
      // Paper end
  
-     compileOnly("org.apache.maven:maven-resolver-provider:3.8.4")
+     compileOnly("org.apache.maven:maven-resolver-provider:3.8.5")
 @@ -77,9 +96,24 @@ tasks.withType<Javadoc> {
          "https://guava.dev/releases/31.0.1-jre/api/docs/",
          "https://javadoc.io/doc/org.yaml/snakeyaml/1.30/",
@@ -1046,7 +1045,7 @@ index cf53aead2eb5a52f1505ca694e95108fce28aa18..14b078e8fa4347dd0e186e5847693904
              throw new UnsupportedOperationException("Not supported yet.");
          }
 diff --git a/src/main/java/org/bukkit/Sound.java b/src/main/java/org/bukkit/Sound.java
-index 77553fe2e7c1b6a4a9c566e663beffd85bdbd21d..c6d09a8bf2157d4c1c8c40fbb78ddcbbef8b762a 100644
+index 21b95d404fbdf7f972f8a13ecd07dc28481f2286..da844079a9d3efd1a92c892de79fc7b3aeecaf4b 100644
 --- a/src/main/java/org/bukkit/Sound.java
 +++ b/src/main/java/org/bukkit/Sound.java
 @@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
@@ -1058,7 +1057,7 @@ index 77553fe2e7c1b6a4a9c566e663beffd85bdbd21d..c6d09a8bf2157d4c1c8c40fbb78ddcbb
  
      AMBIENT_BASALT_DELTAS_ADDITIONS("ambient.basalt_deltas.additions"),
      AMBIENT_BASALT_DELTAS_LOOP("ambient.basalt_deltas.loop"),
-@@ -1227,4 +1227,12 @@ public enum Sound implements Keyed {
+@@ -1345,4 +1345,12 @@ public enum Sound implements Keyed {
      public NamespacedKey getKey() {
          return key;
      }
@@ -1284,7 +1283,7 @@ index ab6b0ec328e94bf65a0dafd0403e5ee3b870296c..c8d37184d8e882a4084a1bfef85faa33
  
      /**
 diff --git a/src/main/java/org/bukkit/command/Command.java b/src/main/java/org/bukkit/command/Command.java
-index 4bfc214685164a38ba4261b2bae7faa8a3bd297e..11af71edd7eaefb3cce3c2b59d390ff92e95ec64 100644
+index 80209bb88a0294d4eedc78509533a6257315d856..57ade3963faae3724d9a01eeeb6d02168acb567e 100644
 --- a/src/main/java/org/bukkit/command/Command.java
 +++ b/src/main/java/org/bukkit/command/Command.java
 @@ -32,8 +32,7 @@ public abstract class Command {
@@ -1404,7 +1403,7 @@ index 4bfc214685164a38ba4261b2bae7faa8a3bd297e..11af71edd7eaefb3cce3c2b59d390ff9
          if (sendToSource && !(source instanceof ConsoleCommandSender)) {
              source.sendMessage(message);
 diff --git a/src/main/java/org/bukkit/command/CommandSender.java b/src/main/java/org/bukkit/command/CommandSender.java
-index 284be63a125624a8ae43d2c164aede810ce6bfe5..22b654efdcc49d6dc6d52c9d6afa1c9dc7978e35 100644
+index 284be63a125624a8ae43d2c164aede810ce6bfe5..ec97093a4410322ad44e111d894a3b1a5c5f7b88 100644
 --- a/src/main/java/org/bukkit/command/CommandSender.java
 +++ b/src/main/java/org/bukkit/command/CommandSender.java
 @@ -6,12 +6,13 @@ import org.bukkit.permissions.Permissible;
@@ -1486,7 +1485,7 @@ index 284be63a125624a8ae43d2c164aede810ce6bfe5..22b654efdcc49d6dc6d52c9d6afa1c9d
          public void sendMessage(@Nullable UUID sender, @NotNull net.md_5.bungee.api.chat.BaseComponent... components) {
              throw new UnsupportedOperationException("Not supported yet.");
          }
-@@ -99,4 +111,18 @@ public interface CommandSender extends Permissible {
+@@ -99,4 +111,39 @@ public interface CommandSender extends Permissible {
      @NotNull
      Spigot spigot();
      // Spigot end
@@ -1502,6 +1501,27 @@ index 284be63a125624a8ae43d2c164aede810ce6bfe5..22b654efdcc49d6dc6d52c9d6afa1c9d
 +    @Override
 +    default void sendMessage(final @NotNull net.kyori.adventure.identity.Identity identity, final @NotNull net.kyori.adventure.text.Component message, final @NotNull net.kyori.adventure.audience.MessageType type) {
 +        this.sendMessage(net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().serialize(message));
++    }
++
++    /**
++     * Sends a message with the MiniMessage format to the command sender.
++     * <p>
++     * See <a href="https://docs.adventure.kyori.net/minimessage/">MiniMessage docs</a>
++     * for more information on the format.
++     *
++     * @param message MiniMessage content
++     */
++    default void sendRichMessage(final @NotNull String message) {
++        this.sendMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(message));
++    }
++
++    /**
++     * Sends a plain message to the command sender.
++     *
++     * @param message plain message
++     */
++    default void sendPlainMessage(final @NotNull String message) {
++        this.sendMessage(net.kyori.adventure.text.Component.text(message));
 +    }
 +    // Paper end
  }
@@ -1549,10 +1569,10 @@ index fcc34b640265f4dccb46b9f09466ab8e1d96043e..74599b4ee0518481c0e3a5f6ab2f5302
 +    // Paper end
  }
 diff --git a/src/main/java/org/bukkit/enchantments/Enchantment.java b/src/main/java/org/bukkit/enchantments/Enchantment.java
-index b833ef63fbe01271ceb2bd83a9eb4a84c9912761..8eb0497c81744874809ebc4bc2e28b128e66a926 100644
+index e2800dc97af5bbb02c555069285a0fa155a9799d..5744a9f432ec75f6b6b1991ff488dffb9591c934 100644
 --- a/src/main/java/org/bukkit/enchantments/Enchantment.java
 +++ b/src/main/java/org/bukkit/enchantments/Enchantment.java
-@@ -294,6 +294,19 @@ public abstract class Enchantment implements Keyed {
+@@ -299,6 +299,19 @@ public abstract class Enchantment implements Keyed {
       * @return True if the enchantment may be applied, otherwise False
       */
      public abstract boolean canEnchantItem(@NotNull ItemStack item);
@@ -2593,7 +2613,7 @@ index 9866c07c999f46cb585709804aaad710c3031d5a..c7c45e2de8cca1bf8b8e12752e08db62
  
      /**
 diff --git a/src/main/java/org/bukkit/event/player/PlayerChatEvent.java b/src/main/java/org/bukkit/event/player/PlayerChatEvent.java
-index 8ea56aac752544f798728b429e7152afbee497e4..213837794c603cb9f152f917941b912326a08030 100644
+index a1f4261eaa1497554f1e51d1d5a072c2eb9226df..3a1da86e3dbf18c6e1040086c1df4b8976bc2b9d 100644
 --- a/src/main/java/org/bukkit/event/player/PlayerChatEvent.java
 +++ b/src/main/java/org/bukkit/event/player/PlayerChatEvent.java
 @@ -18,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
@@ -3219,7 +3239,7 @@ index 03bfca9d368bbe4b7c1353d52c883e756bf69bda..943d324435350d3f16fad3e21cb472a0
  
      /**
 diff --git a/src/main/java/org/bukkit/event/server/ServerListPingEvent.java b/src/main/java/org/bukkit/event/server/ServerListPingEvent.java
-index cc5e2fef75736e56420df4cf4f83152fa97926df..172697ac5dc0ea3551a61b5589416ac68f372cd1 100644
+index b9abfdc61f76c5562de6649f8440aeaab536b3be..c4644f3fd231bff35627ff667e37ccdefbfdbb88 100644
 --- a/src/main/java/org/bukkit/event/server/ServerListPingEvent.java
 +++ b/src/main/java/org/bukkit/event/server/ServerListPingEvent.java
 @@ -21,15 +21,16 @@ public class ServerListPingEvent extends ServerEvent implements Iterable<Player>
@@ -3234,7 +3254,7 @@ index cc5e2fef75736e56420df4cf4f83152fa97926df..172697ac5dc0ea3551a61b5589416ac6
 +    @Deprecated // Paper
      public ServerListPingEvent(@NotNull final InetAddress address, @NotNull final String motd, final int numPlayers, final int maxPlayers) {
          super(true);
-         Validate.isTrue(numPlayers >= 0, "Cannot have negative number of players online", numPlayers);
+         Preconditions.checkArgument(numPlayers >= 0, "Cannot have negative number of players online", numPlayers);
          this.address = address;
 -        this.motd = motd;
 +        this.motd = net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().deserialize(motd); // Paper
@@ -3249,21 +3269,21 @@ index cc5e2fef75736e56420df4cf4f83152fa97926df..172697ac5dc0ea3551a61b5589416ac6
       */
 +    @Deprecated // Paper
      protected ServerListPingEvent(@NotNull final InetAddress address, @NotNull final String motd, final int maxPlayers) {
-+        super(true);
-+        this.numPlayers = MAGIC_PLAYER_COUNT;
-+        this.address = address;
+         super(true);
+         this.numPlayers = MAGIC_PLAYER_COUNT;
+         this.address = address;
 +        this.motd = net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().deserialize(motd); // Paper
 +        this.maxPlayers = maxPlayers;
 +    }
 +    // Paper start
 +    public ServerListPingEvent(@NotNull final InetAddress address, @NotNull final net.kyori.adventure.text.Component motd, final int numPlayers, final int maxPlayers) {
 +        super(true);
-+        Validate.isTrue(numPlayers >= 0, "Cannot have negative number of players online", numPlayers);
++        Preconditions.checkArgument(numPlayers >= 0, "Cannot have negative number of players online (%s)", numPlayers);
 +        this.address = address;
-+        this.motd = motd;
+         this.motd = motd;
 +        this.numPlayers = numPlayers;
-+        this.maxPlayers = maxPlayers;
-+    }
+         this.maxPlayers = maxPlayers;
+     }
 +    /**
 +     * This constructor is intended for implementations that provide the
 +     * {@link #iterator()} method, thus provided the {@link #getNumPlayers()}
@@ -3274,12 +3294,12 @@ index cc5e2fef75736e56420df4cf4f83152fa97926df..172697ac5dc0ea3551a61b5589416ac6
 +     * @param maxPlayers the max number of players
 +     */
 +    protected ServerListPingEvent(@NotNull final InetAddress address, @NotNull final net.kyori.adventure.text.Component motd, final int maxPlayers) {
-         super(true);
-         this.numPlayers = MAGIC_PLAYER_COUNT;
-         this.address = address;
-         this.motd = motd;
-         this.maxPlayers = maxPlayers;
-     }
++        super(true);
++        this.numPlayers = MAGIC_PLAYER_COUNT;
++        this.address = address;
++        this.motd = motd;
++        this.maxPlayers = maxPlayers;
++    }
 +    /**
 +     * Get the message of the day message.
 +     *
@@ -3386,7 +3406,7 @@ index f89d71b77d1200314df6ca23614d5ca6fb15ceb3..af4a7ce37eb10bab06eadb6583c7894b
 +    // Paper end
  }
 diff --git a/src/main/java/org/bukkit/inventory/ItemStack.java b/src/main/java/org/bukkit/inventory/ItemStack.java
-index f70a6a22b85ff0da76e67e9b223ad4e0b020b5c4..a15abec467bac70116a6fc21a300d4930b909f15 100644
+index 7b904dd2c0a660df8874d4800919e16981877163..d168a836d655b369f67200d7afe101b56ff815b1 100644
 --- a/src/main/java/org/bukkit/inventory/ItemStack.java
 +++ b/src/main/java/org/bukkit/inventory/ItemStack.java
 @@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
@@ -4280,7 +4300,7 @@ index 0db7fe1b9fe5621ceed3f4f046691e359f5949dd..47b10df619ad2520b9bb673e2220f363
  
      /**
 diff --git a/src/test/java/org/bukkit/AnnotationTest.java b/src/test/java/org/bukkit/AnnotationTest.java
-index c6a8a37a933cfc5a5885602a8a70fdda8fb6aa10..7f57b95727d0336f1f1548055574e0c129fe9643 100644
+index c6a8a37a933cfc5a5885602a8a70fdda8fb6aa10..93498307004b68b934fbfa1aeb3aaf0e97cbdac7 100644
 --- a/src/test/java/org/bukkit/AnnotationTest.java
 +++ b/src/test/java/org/bukkit/AnnotationTest.java
 @@ -26,6 +26,12 @@ import org.objectweb.asm.tree.ParameterNode;
@@ -4301,7 +4321,7 @@ index c6a8a37a933cfc5a5885602a8a70fdda8fb6aa10..7f57b95727d0336f1f1548055574e0c1
                              for (final org.objectweb.asm.tree.TypeAnnotationNode invisibleTypeAnnotation : method.invisibleTypeAnnotations) {
                                  final org.objectweb.asm.TypeReference ref = new org.objectweb.asm.TypeReference(invisibleTypeAnnotation.typeRef);
 -                                if (ref.getSort() == org.objectweb.asm.TypeReference.METHOD_FORMAL_PARAMETER && ref.getTypeParameterIndex() == i && java.util.Arrays.binarySearch(ACCEPTED_ANNOTATIONS, invisibleTypeAnnotation.desc) >= 0) {
-+                                if (ref.getSort() == org.objectweb.asm.TypeReference.METHOD_FORMAL_PARAMETER && ref.getTypeParameterIndex() == i && org.apache.commons.lang.ArrayUtils.contains(ACCEPTED_ANNOTATIONS, invisibleTypeAnnotation.desc)) {
++                                if (ref.getSort() == org.objectweb.asm.TypeReference.METHOD_FORMAL_PARAMETER && ref.getTypeParameterIndex() == i && java.util.Arrays.asList(ACCEPTED_ANNOTATIONS).contains(invisibleTypeAnnotation.desc)) {
                                      continue dancing;
                                  }
                              }

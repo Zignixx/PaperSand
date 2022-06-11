@@ -6,10 +6,10 @@ Subject: [PATCH] Faster redstone torch rapid clock removal
 Only resize the the redstone torch list once, since resizing arrays / lists is costly
 
 diff --git a/src/main/java/net/minecraft/world/level/Level.java b/src/main/java/net/minecraft/world/level/Level.java
-index 522b33f8d78468f07786dc7d6f184d2bc49dfc3f..9abe4b8bbd97c30d84964d3c66a61e8b43140adb 100644
+index 46c7c63d4dced4e75079588cef2c155859e5ae36..2dc18abb447d1ba51d8b9c301becd7f618e5a404 100644
 --- a/src/main/java/net/minecraft/world/level/Level.java
 +++ b/src/main/java/net/minecraft/world/level/Level.java
-@@ -157,6 +157,7 @@ public abstract class Level implements LevelAccessor, AutoCloseable {
+@@ -167,6 +167,7 @@ public abstract class Level implements LevelAccessor, AutoCloseable {
      private org.spigotmc.TickLimiter tileLimiter;
      private int tileTickPosition;
      public final Map<Explosion.CacheKey, Float> explosionDensityCache = new HashMap<>(); // Paper - Optimize explosions
@@ -18,7 +18,7 @@ index 522b33f8d78468f07786dc7d6f184d2bc49dfc3f..9abe4b8bbd97c30d84964d3c66a61e8b
      public CraftWorld getWorld() {
          return this.world;
 diff --git a/src/main/java/net/minecraft/world/level/block/RedstoneTorchBlock.java b/src/main/java/net/minecraft/world/level/block/RedstoneTorchBlock.java
-index 298928f9dae5fc307872f4cb286b644ed5dbcfde..954b86bea345a8e0e3a8dd425f356db6f5cd496f 100644
+index 9b6f8508d16bcecd9dc148f75598655e3585f175..da07fce0cf7c9fbdb57d2c59e431b59bf583bf50 100644
 --- a/src/main/java/net/minecraft/world/level/block/RedstoneTorchBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/RedstoneTorchBlock.java
 @@ -21,7 +21,7 @@ import org.bukkit.event.block.BlockRedstoneEvent; // CraftBukkit
@@ -32,7 +32,7 @@ index 298928f9dae5fc307872f4cb286b644ed5dbcfde..954b86bea345a8e0e3a8dd425f356db6
      public static final int RESTART_DELAY = 160;
 @@ -72,11 +72,15 @@ public class RedstoneTorchBlock extends TorchBlock {
      @Override
-     public void tick(BlockState state, ServerLevel world, BlockPos pos, Random random) {
+     public void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
          boolean flag = this.hasNeighborSignal(world, pos, state);
 -        List list = (List) RedstoneTorchBlock.RECENT_TOGGLES.get(world);
 -

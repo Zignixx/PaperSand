@@ -6,18 +6,10 @@ Subject: [PATCH] Send attack SoundEffects only to players who can see the
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/player/Player.java b/src/main/java/net/minecraft/world/entity/player/Player.java
-index 7fc4cd29bd487955886c81e6997d832a3185ec8e..de71d57b86d681efe0916dbee53be3ac826f9e2e 100644
+index 794081610e52b7b8e04403510d1ad05f4f11d320..98d776dc6970c5412cfe54538228c6fda2b0d02e 100644
 --- a/src/main/java/net/minecraft/world/entity/player/Player.java
 +++ b/src/main/java/net/minecraft/world/entity/player/Player.java
-@@ -31,6 +31,7 @@ import net.minecraft.network.chat.MutableComponent;
- import net.minecraft.network.chat.TextComponent;
- import net.minecraft.network.chat.TranslatableComponent;
- import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
-+import net.minecraft.network.protocol.game.ClientboundSoundPacket;
- import net.minecraft.network.syncher.EntityDataAccessor;
- import net.minecraft.network.syncher.EntityDataSerializers;
- import net.minecraft.network.syncher.SynchedEntityData;
-@@ -1201,7 +1202,7 @@ public abstract class Player extends LivingEntity {
+@@ -1245,7 +1245,7 @@ public abstract class Player extends LivingEntity {
                      int i = b0 + EnchantmentHelper.getKnockbackBonus(this);
  
                      if (this.isSprinting() && flag) {
@@ -26,7 +18,7 @@ index 7fc4cd29bd487955886c81e6997d832a3185ec8e..de71d57b86d681efe0916dbee53be3ac
                          ++i;
                          flag1 = true;
                      }
-@@ -1276,7 +1277,7 @@ public abstract class Player extends LivingEntity {
+@@ -1320,7 +1320,7 @@ public abstract class Player extends LivingEntity {
                                  }
                              }
  
@@ -35,7 +27,7 @@ index 7fc4cd29bd487955886c81e6997d832a3185ec8e..de71d57b86d681efe0916dbee53be3ac
                              this.sweepAttack();
                          }
  
-@@ -1304,15 +1305,15 @@ public abstract class Player extends LivingEntity {
+@@ -1348,15 +1348,15 @@ public abstract class Player extends LivingEntity {
                          }
  
                          if (flag2) {
@@ -54,7 +46,7 @@ index 7fc4cd29bd487955886c81e6997d832a3185ec8e..de71d57b86d681efe0916dbee53be3ac
                              }
                          }
  
-@@ -1364,7 +1365,7 @@ public abstract class Player extends LivingEntity {
+@@ -1408,7 +1408,7 @@ public abstract class Player extends LivingEntity {
  
                          this.causeFoodExhaustion(level.spigotConfig.combatExhaustion, EntityExhaustionEvent.ExhaustionReason.ATTACK); // CraftBukkit - EntityExhaustionEvent // Spigot - Change to use configurable value
                      } else {
@@ -63,7 +55,7 @@ index 7fc4cd29bd487955886c81e6997d832a3185ec8e..de71d57b86d681efe0916dbee53be3ac
                          if (flag4) {
                              target.clearFire();
                          }
-@@ -1811,6 +1812,14 @@ public abstract class Player extends LivingEntity {
+@@ -1861,6 +1861,14 @@ public abstract class Player extends LivingEntity {
      public int getXpNeededForNextLevel() {
          return this.experienceLevel >= 30 ? 112 + (this.experienceLevel - 30) * 9 : (this.experienceLevel >= 15 ? 37 + (this.experienceLevel - 15) * 5 : 7 + this.experienceLevel * 2);
      }
@@ -71,7 +63,7 @@ index 7fc4cd29bd487955886c81e6997d832a3185ec8e..de71d57b86d681efe0916dbee53be3ac
 +    private static void sendSoundEffect(Player fromEntity, double x, double y, double z, SoundEvent soundEffect, SoundSource soundCategory, float volume, float pitch) {
 +        fromEntity.level.playSound(fromEntity, x, y, z, soundEffect, soundCategory, volume, pitch); // This will not send the effect to the entity himself
 +        if (fromEntity instanceof ServerPlayer) {
-+            ((ServerPlayer) fromEntity).connection.send(new ClientboundSoundPacket(soundEffect, soundCategory, x, y, z, volume, pitch));
++            ((ServerPlayer) fromEntity).connection.send(new net.minecraft.network.protocol.game.ClientboundSoundPacket(soundEffect, soundCategory, x, y, z, volume, pitch, fromEntity.random.nextLong()));
 +        }
 +    }
 +    // Paper end

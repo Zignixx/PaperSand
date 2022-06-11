@@ -11,26 +11,11 @@ just as it does in Vanilla, but entity pushing logic will be capped.
 
 You can set this to 0 to disable collisions.
 
-diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index 8451982ba4fc9522f2d77f68fc63a0e12558955f..ee8ce0e5bdb0acb7d6ef3439a388e108ea1807de 100644
---- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-+++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-@@ -391,4 +391,10 @@ public class PaperWorldConfig {
-         treasureMapsAlreadyDiscoveredVillager = getBoolean("treasure-maps-find-already-discovered.villager-trade", treasureMapsAlreadyDiscoveredVillager);
-         treasureMapsAlreadyDiscoveredLootTable = getBooleanOrNull("treasure-maps-find-already-discovered.loot-tables", treasureMapsAlreadyDiscoveredLootTable);
-     }
-+
-+    public int maxCollisionsPerEntity = 8;
-+    private void maxEntityCollision() {
-+        maxCollisionsPerEntity = getInt( "max-entity-collisions", this.spigotConfig.getInt("max-entity-collisions", this.maxCollisionsPerEntity, false) );
-+        log( "Max Entity Collisions: " + maxCollisionsPerEntity );
-+    }
- }
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 74a5b29ee48964aef9587939ecb3a66f52f658b5..336f6209089d3f076bfdd332bfc80d69509ca209 100644
+index 25fb1785e76aa72eb59565dd51f9fc65b0509869..bfc7736bfe538b615343b6f41f2a670493e2c701 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -317,6 +317,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -373,6 +373,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
      public void inactiveTick() { }
      // Spigot end
      // Paper start
@@ -39,16 +24,16 @@ index 74a5b29ee48964aef9587939ecb3a66f52f658b5..336f6209089d3f076bfdd332bfc80d69
      private org.bukkit.util.Vector origin;
      @javax.annotation.Nullable
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 27ba3a28c18b0af18eb20a7441f361a46700a4bd..a7e09145160f9c26b19a8d61564bf9c04e2616b1 100644
+index 86a624e505db71241e3acb0b9269372ea693031d..7c50e9c28f9f26b42d2baa51d8fa735bb182ffa5 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -3228,8 +3228,11 @@ public abstract class LivingEntity extends Entity {
+@@ -3261,8 +3261,11 @@ public abstract class LivingEntity extends Entity {
                  }
              }
  
 -            for (j = 0; j < list.size(); ++j) {
-+            this.numCollisions = Math.max(0, this.numCollisions - this.level.paperConfig.maxCollisionsPerEntity); // Paper
-+            for (j = 0; j < list.size() && this.numCollisions < this.level.paperConfig.maxCollisionsPerEntity; ++j) { // Paper
++            this.numCollisions = Math.max(0, this.numCollisions - this.level.paperConfig().collisions.maxEntityCollisions); // Paper
++            for (j = 0; j < list.size() && this.numCollisions < this.level.paperConfig().collisions.maxEntityCollisions; ++j) { // Paper
                  Entity entity = (Entity) list.get(j);
 +                entity.numCollisions++; // Paper
 +                this.numCollisions++; // Paper

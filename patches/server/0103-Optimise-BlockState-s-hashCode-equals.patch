@@ -37,10 +37,10 @@ index 4d6e7b5889ecb81195c7152225ae8e3343d3408c..0bca0f971dac994bd8b6ecd87e8b33e2
              return true;
          } else if (object instanceof EnumProperty && super.equals(object)) {
 diff --git a/src/main/java/net/minecraft/world/level/block/state/properties/IntegerProperty.java b/src/main/java/net/minecraft/world/level/block/state/properties/IntegerProperty.java
-index c3ec7f91794d802e5b9ddac3fffccce378dace68..72f508321ebffcca31240fbdd068b4d185454cbc 100644
+index 59b5b22a567e4e2be499a2a35aedb10218a7432a..bdbe0362e49e73c05237f9f3143230e0b03e494e 100644
 --- a/src/main/java/net/minecraft/world/level/block/state/properties/IntegerProperty.java
 +++ b/src/main/java/net/minecraft/world/level/block/state/properties/IntegerProperty.java
-@@ -38,8 +38,7 @@ public class IntegerProperty extends Property<Integer> {
+@@ -35,8 +35,7 @@ public class IntegerProperty extends Property<Integer> {
          return this.values;
      }
  

@@ -6,10 +6,10 @@ Subject: [PATCH] EntityRegainHealthEvent isFastRegen API
 Don't even get me started
 
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index c358c3d20669a9063439cee4a77555b5aa43bbf2..fdf44f109d548d36d84e77fce5aa7fce865448dd 100644
+index e9747640adff75df331e794f08397619379ae280..3a597e7ce159b78078b1d64258a6f30e51645f3b 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -1227,10 +1227,16 @@ public abstract class LivingEntity extends Entity {
+@@ -1250,10 +1250,16 @@ public abstract class LivingEntity extends Entity {
      }
  
      public void heal(float f, EntityRegainHealthEvent.RegainReason regainReason) {

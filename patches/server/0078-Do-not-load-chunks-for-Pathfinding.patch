@@ -5,10 +5,10 @@ Subject: [PATCH] Do not load chunks for Pathfinding
 
 
 diff --git a/src/main/java/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java b/src/main/java/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java
-index ca45dfc6c05760e00987c09b697efb1f9ff0e78a..2d42df635b1ce8d975278fb36f00fe9b8b8f060f 100644
+index 235b01e23a8997d0d65de3655b3b3ff50a204c06..c48e097464977dbec22d1370c3393ba1fe105137 100644
 --- a/src/main/java/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java
 +++ b/src/main/java/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java
-@@ -457,7 +457,12 @@ public class WalkNodeEvaluator extends NodeEvaluator {
+@@ -477,7 +477,12 @@ public class WalkNodeEvaluator extends NodeEvaluator {
                  for(int n = -1; n <= 1; ++n) {
                      if (l != 0 || n != 0) {
                          pos.set(i + l, j + m, k + n);
@@ -22,7 +22,7 @@ index ca45dfc6c05760e00987c09b697efb1f9ff0e78a..2d42df635b1ce8d975278fb36f00fe9b
                          if (blockState.is(Blocks.CACTUS)) {
                              return BlockPathTypes.DANGER_CACTUS;
                          }
-@@ -473,6 +478,7 @@ public class WalkNodeEvaluator extends NodeEvaluator {
+@@ -493,6 +498,7 @@ public class WalkNodeEvaluator extends NodeEvaluator {
                          if (world.getFluidState(pos).is(FluidTags.WATER)) {
                              return BlockPathTypes.WATER_BORDER;
                          }
@@ -30,7 +30,7 @@ index ca45dfc6c05760e00987c09b697efb1f9ff0e78a..2d42df635b1ce8d975278fb36f00fe9b
                      }
                  }
              }
-@@ -482,7 +488,8 @@ public class WalkNodeEvaluator extends NodeEvaluator {
+@@ -502,7 +508,8 @@ public class WalkNodeEvaluator extends NodeEvaluator {
      }
  
      protected static BlockPathTypes getBlockPathTypeRaw(BlockGetter world, BlockPos pos) {

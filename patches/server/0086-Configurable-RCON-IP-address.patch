@@ -6,10 +6,10 @@ Subject: [PATCH] Configurable RCON IP address
 For servers with multiple IP's, ability to bind to a specific interface.
 
 diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServerProperties.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServerProperties.java
-index 703403222763e42566552f2c6f3852e07f727f76..a7938420f6840b9d3880fb895aaf709ebd844312 100644
+index cfff4a6711b2acd4b40ec80544c169a46ded3f79..cc92e2c5e6b62c6a67d0a6534b078e3a6029daf5 100644
 --- a/src/main/java/net/minecraft/server/dedicated/DedicatedServerProperties.java
 +++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServerProperties.java
-@@ -74,6 +74,8 @@ public class DedicatedServerProperties extends Settings<DedicatedServerPropertie
+@@ -100,6 +100,8 @@ public class DedicatedServerProperties extends Settings<DedicatedServerPropertie
      @Nullable
      private WorldGenSettings worldGenSettings;
  
@@ -18,10 +18,10 @@ index 703403222763e42566552f2c6f3852e07f727f76..a7938420f6840b9d3880fb895aaf709e
      // CraftBukkit start
      public DedicatedServerProperties(Properties properties, OptionSet optionset) {
          super(properties, optionset);
-@@ -124,6 +126,10 @@ public class DedicatedServerProperties extends Settings<DedicatedServerPropertie
-         }, new JsonObject()), this.get("generate-structures", true), (String) this.get("level-type", (s) -> {
+@@ -152,6 +154,10 @@ public class DedicatedServerProperties extends Settings<DedicatedServerPropertie
              return s.toLowerCase(Locale.ROOT);
-         }, "default"));
+         }, WorldPresets.NORMAL.location().toString()));
+         this.serverResourcePackInfo = DedicatedServerProperties.getServerPackInfo(this.get("resource-pack", ""), this.get("resource-pack-sha1", ""), this.getLegacyString("resource-pack-hash"), this.get("require-resource-pack", false), this.get("resource-pack-prompt", ""));
 +        // Paper start - Configurable rcon ip
 +        final String rconIp = this.getStringRaw("rcon.ip");
 +        this.rconIp = rconIp == null ? this.serverIp : rconIp;

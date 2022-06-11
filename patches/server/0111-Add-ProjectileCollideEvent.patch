@@ -5,10 +5,10 @@ Subject: [PATCH] Add ProjectileCollideEvent
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/projectile/AbstractArrow.java b/src/main/java/net/minecraft/world/entity/projectile/AbstractArrow.java
-index 68b15e3061e1e8637a34ee5e0f0953dd23645f49..91505b592e95240e0dc71a17906ab48f5eb94f34 100644
+index 7cd802be238cedf166174a61e816d9d4b29b87d2..7f1f4813ac007fbf79e8ba254075c015fe15e3a1 100644
 --- a/src/main/java/net/minecraft/world/entity/projectile/AbstractArrow.java
 +++ b/src/main/java/net/minecraft/world/entity/projectile/AbstractArrow.java
-@@ -225,6 +225,17 @@ public abstract class AbstractArrow extends Projectile {
+@@ -226,6 +226,17 @@ public abstract class AbstractArrow extends Projectile {
                      }
                  }
  
@@ -27,7 +27,7 @@ index 68b15e3061e1e8637a34ee5e0f0953dd23645f49..91505b592e95240e0dc71a17906ab48f
                      this.preOnHit((HitResult) object); // CraftBukkit - projectile hit event
                      this.hasImpulse = true;
 diff --git a/src/main/java/net/minecraft/world/entity/projectile/AbstractHurtingProjectile.java b/src/main/java/net/minecraft/world/entity/projectile/AbstractHurtingProjectile.java
-index 02b0622d23521090a0725e2b24cc1231e416ba0c..3de3258418f638a1b523c6a9178bb3ef1aaf2915 100644
+index 867e50769af3c5bdbed15cfd637e429dcfcb6920..d71dc286673fa7ed708be5bec4c5a6868874c090 100644
 --- a/src/main/java/net/minecraft/world/entity/projectile/AbstractHurtingProjectile.java
 +++ b/src/main/java/net/minecraft/world/entity/projectile/AbstractHurtingProjectile.java
 @@ -11,6 +11,7 @@ import net.minecraft.world.entity.Entity;
@@ -87,10 +87,10 @@ index 88181c59e604ba3b132b9e695cef5eaf5b836029..94d09b05737679b133ec462815b010b1
  
          this.checkInsideBlocks();
 diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-index ed3014b2c8d3c182c0011a5d970216b6f4c6afa5..fdf00487c7ff1fb1058a28e63e535165b26fc34a 100644
+index 87a1f13c07a3cebb75155b7d8186befa63d147c9..4de19058b61d4def69161f26bed6c43aa63a4403 100644
 --- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-@@ -1253,6 +1253,16 @@ public class CraftEventFactory {
+@@ -1255,6 +1255,16 @@ public class CraftEventFactory {
          return CraftItemStack.asNMSCopy(bitem);
      }
  

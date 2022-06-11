@@ -6,11 +6,11 @@ Subject: [PATCH] Add handshake event to allow plugins to handle client
 
 
 diff --git a/src/main/java/net/minecraft/server/network/ServerHandshakePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerHandshakePacketListenerImpl.java
-index 02613b1f36ecd7f354ac00022af3c193b299c1b1..63cc89c7769bfcc9d663a1827ad525e3ddd82fe5 100644
+index eb94a7a156df1616f8093bf2f082de3754917086..9016aced079108aeae09f030a672467a953ef93f 100644
 --- a/src/main/java/net/minecraft/server/network/ServerHandshakePacketListenerImpl.java
 +++ b/src/main/java/net/minecraft/server/network/ServerHandshakePacketListenerImpl.java
-@@ -88,9 +88,36 @@ public class ServerHandshakePacketListenerImpl implements ServerHandshakePacketL
-                     this.connection.disconnect(chatmessage);
+@@ -87,9 +87,36 @@ public class ServerHandshakePacketListenerImpl implements ServerHandshakePacketL
+                     this.connection.disconnect(ichatmutablecomponent);
                  } else {
                      this.connection.setListener(new ServerLoginPacketListenerImpl(this.server, this.connection));
 +                // Paper start - handshake event

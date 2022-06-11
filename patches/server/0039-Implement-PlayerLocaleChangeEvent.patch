@@ -5,10 +5,10 @@ Subject: [PATCH] Implement PlayerLocaleChangeEvent
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index 726c5f4ef0ad083d18b23990f1f7b61e3866290c..d184c3f8f8f86b783f17d71886c9b43a74482f2a 100644
+index 66fa7e12a9a398d510a75549c3db135feb4c562c..e839487415ad88bdea1ce3f4f84a6f9649eb9da9 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-@@ -1733,7 +1733,7 @@ public class ServerPlayer extends Player {
+@@ -1755,7 +1755,7 @@ public class ServerPlayer extends Player {
          return s;
      }
  
@@ -17,7 +17,7 @@ index 726c5f4ef0ad083d18b23990f1f7b61e3866290c..d184c3f8f8f86b783f17d71886c9b43a
      public java.util.Locale adventure$locale = java.util.Locale.US; // Paper
      public void updateOptions(ServerboundClientInformationPacket packet) {
          // CraftBukkit start
-@@ -1741,9 +1741,10 @@ public class ServerPlayer extends Player {
+@@ -1763,9 +1763,10 @@ public class ServerPlayer extends Player {
              PlayerChangedMainHandEvent event = new PlayerChangedMainHandEvent(this.getBukkitEntity(), getMainArm() == HumanoidArm.LEFT ? MainHand.LEFT : MainHand.RIGHT);
              this.server.server.getPluginManager().callEvent(event);
          }
@@ -30,10 +30,10 @@ index 726c5f4ef0ad083d18b23990f1f7b61e3866290c..d184c3f8f8f86b783f17d71886c9b43a
          this.locale = packet.language;
          // Paper start
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 6c866e9fc091b8f2b982d5554f381bfed7d669a9..9b03879242d0f299a51cb4e91dd83b68a8ea3b9c 100644
+index 7df667b54478d5e415cf6872984db33981b8e4f9..c5a02c5a6ccf14d2088ee0b65fd27db926b26eac 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -1961,8 +1961,10 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1958,8 +1958,10 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
  
      @Override
      public String getLocale() {

@@ -7,10 +7,10 @@ I hope to look at this more in-depth soon. It appears doable.
 However this should not block the update.
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index d184c3f8f8f86b783f17d71886c9b43a74482f2a..e8cda0032a6c80e939d24be190507cba006a0280 100644
+index e839487415ad88bdea1ce3f4f84a6f9649eb9da9..447d4e724b5ff129bd6670f4d7b2111acfe33719 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-@@ -2205,4 +2205,6 @@ public class ServerPlayer extends Player {
+@@ -2242,4 +2242,6 @@ public class ServerPlayer extends Player {
          return (CraftPlayer) super.getBukkitEntity();
      }
      // CraftBukkit end
@@ -18,10 +18,10 @@ index d184c3f8f8f86b783f17d71886c9b43a74482f2a..e8cda0032a6c80e939d24be190507cba
 +    public final int getViewDistance() { return this.getLevel().getChunkSource().chunkMap.viewDistance - 1; } // Paper - placeholder
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-index 5476dc1e80093d7684bc238bae102cbb691cec4f..be8b7170f3746e53985286066138781099930934 100644
+index 1357bc97801f892e59fc8e89c3cc2d697894ccfb..cf9c2456004ce5fc0e38da33251f66df0b3fdd51 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-@@ -1833,6 +1833,37 @@ public class CraftWorld extends CraftRegionAccessor implements World {
+@@ -1834,6 +1834,37 @@ public class CraftWorld extends CraftRegionAccessor implements World {
          return world.spigotConfig.simulationDistance;
      }
      // Spigot end
@@ -60,52 +60,52 @@ index 5476dc1e80093d7684bc238bae102cbb691cec4f..be8b7170f3746e539852860661387810
      // Spigot start
      private final org.bukkit.World.Spigot spigot = new org.bukkit.World.Spigot()
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 9b03879242d0f299a51cb4e91dd83b68a8ea3b9c..34b2b30ba5bf1f163ed647db1ea75e57323fb042 100644
+index c5a02c5a6ccf14d2088ee0b65fd27db926b26eac..5d35cd1b790197c92f2340426e5dd17827b3bfaa 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -405,6 +405,46 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -402,6 +402,46 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
              connection.disconnect(message == null ? net.kyori.adventure.text.Component.empty() : message);
          }
      }
 +
 +    @Override
 +    public int getViewDistance() {
-+        throw new NotImplementedException("Per-Player View Distance APIs need further understanding to properly implement (There are per world view distances though!)"); // TODO
++        throw new UnsupportedOperationException("Per-Player View Distance APIs need further understanding to properly implement (There are per world view distances though!)"); // TODO
 +    }
 +
 +    @Override
 +    public void setViewDistance(int viewDistance) {
-+        throw new NotImplementedException("Per-Player View Distance APIs need further understanding to properly implement (There are per world view distances though!)"); // TODO
++        throw new UnsupportedOperationException("Per-Player View Distance APIs need further understanding to properly implement (There are per world view distances though!)"); // TODO
 +    }
 +
 +    @Override
 +    public int getSimulationDistance() {
-+        throw new NotImplementedException("Per-Player View Distance APIs need further understanding to properly implement (There are per world view distances though!)"); // TODO
++        throw new UnsupportedOperationException("Per-Player View Distance APIs need further understanding to properly implement (There are per world view distances though!)"); // TODO
 +    }
 +
 +    @Override
 +    public void setSimulationDistance(int simulationDistance) {
-+        throw new NotImplementedException("Per-Player View Distance APIs need further understanding to properly implement (There are per world view distances though!)"); // TODO
++        throw new UnsupportedOperationException("Per-Player View Distance APIs need further understanding to properly implement (There are per world view distances though!)"); // TODO
 +    }
 +
 +    @Override
 +    public int getNoTickViewDistance() {
-+        throw new NotImplementedException("Per-Player View Distance APIs need further understanding to properly implement (There are per world view distances though!)"); // TODO
++        throw new UnsupportedOperationException("Per-Player View Distance APIs need further understanding to properly implement (There are per world view distances though!)"); // TODO
 +    }
 +
 +    @Override
 +    public void setNoTickViewDistance(int viewDistance) {
-+        throw new NotImplementedException("Per-Player View Distance APIs need further understanding to properly implement (There are per world view distances though!)"); // TODO
++        throw new UnsupportedOperationException("Per-Player View Distance APIs need further understanding to properly implement (There are per world view distances though!)"); // TODO
 +    }
 +
 +    @Override
 +    public int getSendViewDistance() {
-+        throw new NotImplementedException("Per-Player View Distance APIs need further understanding to properly implement (There are per world view distances though!)"); // TODO
++        throw new UnsupportedOperationException("Per-Player View Distance APIs need further understanding to properly implement (There are per world view distances though!)"); // TODO
 +    }
 +
 +    @Override
 +    public void setSendViewDistance(int viewDistance) {
-+        throw new NotImplementedException("Per-Player View Distance APIs need further understanding to properly implement (There are per world view distances though!)"); // TODO
++        throw new UnsupportedOperationException("Per-Player View Distance APIs need further understanding to properly implement (There are per world view distances though!)"); // TODO
 +    }
      // Paper end
  

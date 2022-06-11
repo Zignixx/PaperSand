@@ -6,10 +6,10 @@ Subject: [PATCH] Only send Dragon/Wither Death sounds to same world
 Also fix view distance lookup
 
 diff --git a/src/main/java/net/minecraft/world/entity/boss/enderdragon/EnderDragon.java b/src/main/java/net/minecraft/world/entity/boss/enderdragon/EnderDragon.java
-index 10da58381202f8ec3d49aa2ed08faf30c435883b..89bd094fc31969284d831eaab47a131914d4fb13 100644
+index 13fa9c47a95571d63b590c595e15e9a15c2f6a65..7b64b14b1d2c0e242a5d8e8602e49b185fcf8839 100644
 --- a/src/main/java/net/minecraft/world/entity/boss/enderdragon/EnderDragon.java
 +++ b/src/main/java/net/minecraft/world/entity/boss/enderdragon/EnderDragon.java
-@@ -637,8 +637,9 @@ public class EnderDragon extends Mob implements Enemy {
+@@ -633,8 +633,9 @@ public class EnderDragon extends Mob implements Enemy {
              if (this.dragonDeathTime == 1 && !this.isSilent()) {
                  // CraftBukkit start - Use relative location for far away sounds
                  // this.world.b(1028, this.getChunkCoordinates(), 0);

@@ -17,31 +17,27 @@ from networking or during connections flood of chunk packets on slower clients,
  at the cost of dead connections being kept open for longer.
 
 diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-index abde2821d59717517bda456b45a28a1d5054c6ba..f6fd0aa58927b51803c42b342abbf571b3d5638b 100644
+index 32c59e612519323c8ee1956a1a893354913d1fda..71e52f71ac06f66696f5ae9b79ab490c7389927f 100644
 --- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 +++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-@@ -221,9 +221,9 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
-     private final MinecraftServer server;
+@@ -240,7 +240,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
      public ServerPlayer player;
      private int tickCount;
--    private long keepAliveTime; @Deprecated private void setLastPing(long lastPing) { this.keepAliveTime = lastPing;}; @Deprecated private long getLastPing() { return this.keepAliveTime;}; // Paper - OBFHELPER
--    private boolean keepAlivePending; @Deprecated private void setPendingPing(boolean isPending) { this.keepAlivePending = isPending;}; @Deprecated private boolean isPendingPing() { return this.keepAlivePending;}; // Paper - OBFHELPER
--    private long keepAliveChallenge; @Deprecated private void setKeepAliveID(long keepAliveID) { this.keepAliveChallenge = keepAliveID;}; @Deprecated private long getKeepAliveID() {return this.keepAliveChallenge; };  // Paper - OBFHELPER
+     private int ackBlockChangesUpTo = -1;
+-    private long keepAliveTime;
 +    private long keepAliveTime = Util.getMillis();
-+    private boolean keepAlivePending;
-+    private long keepAliveChallenge;
+     private boolean keepAlivePending;
+     private long keepAliveChallenge;
      // CraftBukkit start - multithreaded fields
-     private final AtomicInteger chatSpamTickCount = new AtomicInteger();
-     // CraftBukkit end
-@@ -252,6 +252,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
-     private int aboveGroundVehicleTickCount;
-     private int receivedMovePacketCount;
+@@ -273,6 +273,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
      private int knownMovePacketCount;
+     private final ChatPreviewThrottler chatPreviewThrottler = new ChatPreviewThrottler();
+     private final AtomicReference<Instant> lastChatTimeStamp;
 +    private static final long KEEPALIVE_LIMIT = Long.getLong("paper.playerconnection.keepalive", 30) * 1000; // Paper - provide property to set keepalive limit
  
      public ServerGamePacketListenerImpl(MinecraftServer server, Connection connection, ServerPlayer player) {
-         this.server = server;
-@@ -333,18 +334,25 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
+         this.lastChatTimeStamp = new AtomicReference(Instant.EPOCH);
+@@ -360,18 +361,25 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
          }
  
          this.server.getProfiler().push("keepAlive");
@@ -49,7 +45,7 @@ index abde2821d59717517bda456b45a28a1d5054c6ba..f6fd0aa58927b51803c42b342abbf571
 -
 -        if (i - this.keepAliveTime >= 25000L) { // CraftBukkit
 -            if (this.keepAlivePending) {
--                this.disconnect(new TranslatableComponent("disconnect.timeout"));
+-                this.disconnect(Component.translatable("disconnect.timeout"));
 -            } else {
 +        // Paper Start - give clients a longer time to respond to pings as per pre 1.12.2 timings
 +        // This should effectively place the keepalive handling back to "as it was" before 1.12.2
@@ -59,7 +55,7 @@ index abde2821d59717517bda456b45a28a1d5054c6ba..f6fd0aa58927b51803c42b342abbf571
 +        if (this.keepAlivePending) {
 +            if (!this.processedDisconnect && elapsedTime >= KEEPALIVE_LIMIT) { // check keepalive limit, don't fire if already disconnected
 +                ServerGamePacketListenerImpl.LOGGER.warn("{} was kicked due to keepalive timeout!", this.player.getScoreboardName()); // more info
-+                this.disconnect(new TranslatableComponent("disconnect.timeout", new Object[0]));
++                this.disconnect(Component.translatable("disconnect.timeout", new Object[0]));
 +            }
 +        } else {
 +            if (elapsedTime >= 15000L) { // 15 seconds

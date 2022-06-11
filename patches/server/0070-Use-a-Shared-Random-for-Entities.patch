@@ -6,16 +6,18 @@ Subject: [PATCH] Use a Shared Random for Entities
 Reduces memory usage and provides ensures more randomness, Especially since a lot of garbage entity objects get created.
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 79dddb060d967303be70b690df83c3b2a2b1f67e..f35f6221f839504329f0d87c417ad40ad68bc178 100644
+index 704a5aa2881c6f826d49ad9aed6003db7c5f5843..e3fe98ef3a7537d3717824d3357cc84c632ee0ea 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -155,6 +155,21 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -158,6 +158,74 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
          return tag.contains("Bukkit.updateLevel") && tag.getInt("Bukkit.updateLevel") >= level;
      }
  
 +    // Paper start
-+    public static Random SHARED_RANDOM = new Random() {
++    public static RandomSource SHARED_RANDOM = new RandomRandomSource();
++    private static final class RandomRandomSource extends java.util.Random implements RandomSource {
 +        private boolean locked = false;
++
 +        @Override
 +        public synchronized void setSeed(long seed) {
 +            if (locked) {
@@ -25,17 +27,68 @@ index 79dddb060d967303be70b690df83c3b2a2b1f67e..f35f6221f839504329f0d87c417ad40a
 +                locked = true;
 +            }
 +        }
-+    };
++
++        @Override
++        public RandomSource fork() {
++            return new net.minecraft.world.level.levelgen.LegacyRandomSource(this.nextLong());
++        }
++
++        @Override
++        public net.minecraft.world.level.levelgen.PositionalRandomFactory forkPositional() {
++            return new net.minecraft.world.level.levelgen.LegacyRandomSource.LegacyPositionalRandomFactory(this.nextLong());
++        }
++
++        @Override
++        public int nextInt(int origin, int bound) {
++            return RandomSource.super.nextInt(origin, bound);
++        }
++
++        // these below are added to fix reobf issues that I don't wanna deal with right now
++        @Override
++        public long nextLong() {
++            return super.nextInt();
++        }
++
++        @Override
++        public int nextInt() {
++            return super.nextInt();
++        }
++
++        @Override
++        public int nextInt(int bound) {
++            return super.nextInt(bound);
++        }
++
++        @Override
++        public boolean nextBoolean() {
++            return super.nextBoolean();
++        }
++
++        @Override
++        public float nextFloat() {
++            return super.nextFloat();
++        }
++
++        @Override
++        public double nextDouble() {
++            return super.nextDouble();
++        }
++
++        @Override
++        public double nextGaussian() {
++            return super.nextGaussian();
++        }
++    }
 +    // Paper end
 +
      private CraftEntity bukkitEntity;
  
      public CraftEntity getBukkitEntity() {
-@@ -342,7 +357,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -345,7 +413,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
          this.bb = Entity.INITIAL_AABB;
          this.stuckSpeedMultiplier = Vec3.ZERO;
          this.nextStep = 1.0F;
--        this.random = new Random();
+-        this.random = RandomSource.create();
 +        this.random = SHARED_RANDOM; // Paper
          this.remainingFireTicks = -this.getFireImmuneTicks();
          this.fluidHeight = new Object2DoubleArrayMap(2);

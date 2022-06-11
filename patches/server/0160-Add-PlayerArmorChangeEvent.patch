@@ -5,7 +5,7 @@ Subject: [PATCH] Add PlayerArmorChangeEvent
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index a7e09145160f9c26b19a8d61564bf9c04e2616b1..2449cd753ec52b7e2d2213fcd3979d616a33c677 100644
+index 7c50e9c28f9f26b42d2baa51d8fa735bb182ffa5..27a2ba075a2f7575b6788c66a121fc906b19a99d 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -1,5 +1,6 @@
@@ -15,7 +15,7 @@ index a7e09145160f9c26b19a8d61564bf9c04e2616b1..2449cd753ec52b7e2d2213fcd3979d61
  import com.google.common.base.Objects;
  import com.google.common.collect.ImmutableList;
  import com.google.common.collect.ImmutableMap;
-@@ -2941,6 +2942,13 @@ public abstract class LivingEntity extends Entity {
+@@ -2974,6 +2975,13 @@ public abstract class LivingEntity extends Entity {
              ItemStack itemstack1 = this.getItemBySlot(enumitemslot);
  
              if (!ItemStack.matches(itemstack1, itemstack)) {

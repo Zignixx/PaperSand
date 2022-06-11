@@ -5,10 +5,10 @@ Subject: [PATCH] Async GameProfileCache saving
 
 
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 9e95cb40ce6839de2582e71576b73cdf8787a042..49c354fa65e0047a367f0a5410c79b8da8693df9 100644
+index 681121909bdf81d5a05670f0b0150f6276d00281..a4623129ffa537db39ee2f206fa775c950e07a21 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -985,7 +985,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -942,7 +942,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
          } catch (java.lang.InterruptedException ignored) {} // Paper
          if (org.spigotmc.SpigotConfig.saveUserCacheOnStopOnly) {
              MinecraftServer.LOGGER.info("Saving usercache.json");
@@ -18,10 +18,10 @@ index 9e95cb40ce6839de2582e71576b73cdf8787a042..49c354fa65e0047a367f0a5410c79b8d
          // Spigot end
  
 diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-index 20ff08f1a802d16d2306b570e9fb529946d90f6b..b99c1b62ce01700d5c374a1801e8323d5906255c 100644
+index 2f2e07094a362ea1f459da85eb9ef84945a6e206..ee509d7b06a9785a39b59329a19531047953831b 100644
 --- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-@@ -258,7 +258,7 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
+@@ -247,7 +247,7 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
          }
  
          if (this.convertOldUsers()) {
@@ -31,7 +31,7 @@ index 20ff08f1a802d16d2306b570e9fb529946d90f6b..b99c1b62ce01700d5c374a1801e8323d
  
          if (!OldUsersConverter.serverReadyAfterUserconversion(this)) {
 diff --git a/src/main/java/net/minecraft/server/players/GameProfileCache.java b/src/main/java/net/minecraft/server/players/GameProfileCache.java
-index 975ab6061f9d70eb61885960fdfdb24e71b2239e..fdf2557ed19c6ba9c64eddd2876b2434925dcf36 100644
+index fb110ecb7fa8d0de7d8ce8e239d1db341a333203..717a0d1c1f4df7ebd5f4cdd5e24cabe3fb66bf06 100644
 --- a/src/main/java/net/minecraft/server/players/GameProfileCache.java
 +++ b/src/main/java/net/minecraft/server/players/GameProfileCache.java
 @@ -127,7 +127,7 @@ public class GameProfileCache {

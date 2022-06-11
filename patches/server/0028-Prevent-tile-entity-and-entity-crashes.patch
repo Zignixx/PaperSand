@@ -5,10 +5,10 @@ Subject: [PATCH] Prevent tile entity and entity crashes
 
 
 diff --git a/src/main/java/net/minecraft/world/level/Level.java b/src/main/java/net/minecraft/world/level/Level.java
-index 1cb128fb60636016db826ab3120d586346d88cec..8653fa072825c024e0fb620bdada4adc936b0490 100644
+index 5cc0546926ca1403aa325344fc138265f923fe1e..b35ca9316bf719e6b45f4d33ca7deecc95321ab3 100644
 --- a/src/main/java/net/minecraft/world/level/Level.java
 +++ b/src/main/java/net/minecraft/world/level/Level.java
-@@ -736,11 +736,11 @@ public abstract class Level implements LevelAccessor, AutoCloseable {
+@@ -698,11 +698,11 @@ public abstract class Level implements LevelAccessor, AutoCloseable {
          try {
              tickConsumer.accept(entity);
          } catch (Throwable throwable) {
@@ -44,10 +44,10 @@ index be08224c8107aab3e9a3645a20977dd14bfff782..c518704386f14cd033307dd976455c35
          }
      }
 diff --git a/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java b/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
-index 5496c9ae4af9658164098356532da47351808b51..ed6203119fe2e4ee47a2d51c84df5b7c236f32da 100644
+index 58a245b2ca6e65d491694142ad04d38236b46434..a438025a2102fa911a6941cd9723c84743113dc7 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
-@@ -1024,11 +1024,11 @@ public class LevelChunk extends ChunkAccess {
+@@ -1049,11 +1049,11 @@ public class LevelChunk extends ChunkAccess {
  
                          gameprofilerfiller.pop();
                      } catch (Throwable throwable) {
