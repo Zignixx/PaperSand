@@ -10,10 +10,10 @@ When not per player it will use the Vanilla mechanic of one delay per
 world and the world age for the start day.
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index 8421ecaec9a475163860966fea28ec66943b6f86..d777fa8dd3529faf14bf82d023e00e9a118b45e5 100644
+index 75bcab623004159f36a5a976c7b6f69873a108dd..1c97da7c291c985bf53c88d569077edce1a2d662 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-@@ -230,6 +230,7 @@ public class ServerPlayer extends Player {
+@@ -231,6 +231,7 @@ public class ServerPlayer extends Player {
      public boolean wonGame;
      private int containerUpdateDelay; // Paper
      public long loginTime; // Paper

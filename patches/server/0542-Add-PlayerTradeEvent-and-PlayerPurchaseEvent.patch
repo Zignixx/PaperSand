@@ -37,7 +37,7 @@ index 0c585354ba459ceb6badbf60dcf7b068bfa108b6..5eab7d50734551d96128dfebee126a1d
              CriteriaTriggers.TRADE.trigger((ServerPlayer) this.tradingPlayer, this, offer.getResult());
          }
 diff --git a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
-index 36d42b2a97168dfa525b55d8fa2f7a603b43340f..f1438e527d6291a789d2ec821481f6ec142d1c0b 100644
+index 66261330157cef50dfabb7f92e9ece6dcd280951..823ead0fd1942db0219968cd383439b324b16f6e 100644
 --- a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
 +++ b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
 @@ -751,6 +751,14 @@ public abstract class AbstractContainerMenu {
